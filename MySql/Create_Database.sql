@@ -1,6 +1,6 @@
-CREATE DATABASE proj_rafa;
+CREATE DATABASE projeto_ergan_ko_star;
 
-USE proj_rafa;
+USE projeto_ergan_ko_star;
 
 CREATE TABLE log_APIS (
 id int primary key auto_increment,
