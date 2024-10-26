@@ -1,9 +1,13 @@
 <?php
 
-$host="localhost";
-$user="root";
-$pass="123";
-$bd="Proj_Rafa";
+require '../vendor/autoload.php';
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__. '/../');
+$dotenv->load();
+
+$host=$_ENV['HOST'];
+$user=$_ENV['USER'];
+$pass=$_ENV['PASS'];
+$bd=$_ENV['DATABASE'];
 
 $conn = new mysqli($host, $user, $pass, $bd);
 

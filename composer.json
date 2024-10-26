@@ -1,0 +1,17 @@
+{
+    "name": "jonas/projeto_ergan_ko_star",
+    "autoload": {
+        "psr-4": {
+            "Jonas\\ProjetoErganKoStar\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Jonas Cavalcante Duarte",
+            "email": "jonas-cavalcante16@outlook.com"
+        }
+    ],
+    "require": {
+        "vlucas/phpdotenv": "^5.6"
+    }
+}
