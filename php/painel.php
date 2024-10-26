@@ -25,7 +25,7 @@ include('protect.php');
                 <a class="nav-link" href="?page=cadastro">Cadastrar usuário</a>
                 <a class="nav-link" href="?page=listaUser">Gerenciar acessos</a>
                 <a class="nav-link" href="?page=altCredAMZ">Alterar credenciais API Amazon</a>
-                <a class="nav-link disabled" aria-disabled="true" href="#">Gerenciar Produtos</a>
+                <a class="nav-link" href="?page=listarProdutos">Gerenciar Produtos</a>
                 <!-- <a class="nav-link disabled" aria-disabled="true" href="#">Alterar credenciais API Amazon</a> -->
                 <a class="nav-link disabled" aria-disabled="true" href="#">Dashboard</a>
                 <a class="nav-link" href="logout.php">Sair</a>
@@ -53,11 +53,11 @@ include('protect.php');
                         case "editarUsuario":
                             include("editarUsuario.php");
                         break;
-                        case "excluirUsuario":
-                            include("#");
+                        case "listarProdutos":
+                            include("listarProdutos.php");
                         break;
-                        case "cadastrarProduto":
-                            include("#");
+                        case "editarProduto":
+                            include("editarProduto.php");
                         break;
 
                         default:

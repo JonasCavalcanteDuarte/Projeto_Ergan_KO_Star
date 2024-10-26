@@ -38,8 +38,5 @@ $row = $sql_exec->fetch_object();
             <button type="submit">Atualizar dados</button>
         </p>
     </form>
-    <div class="copy_right">
-            <p>© Todos os direitos reservados.</p>
-    </div>
 </body>
 </html>
