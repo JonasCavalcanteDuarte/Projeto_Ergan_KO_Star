@@ -1,7 +1,7 @@
 <?php
     
     switch(@$_REQUEST["acao"]){
-        case "cadastrar":
+        case "editar":
             if(isset($_POST['email'])){
                 include('conexao.php');
                 $nome = $conn->real_escape_string($_POST['nome']);
