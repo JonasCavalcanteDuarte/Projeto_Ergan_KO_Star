@@ -23,7 +23,7 @@
     $limite = 10;
     $inicio = ($pagina * $limite) - $limite;
 
-    $query = "SELECT * FROM products ORDER BY quantity DESC LIMIT $inicio,$limite";
+    $query = "SELECT A.*, B.acquisition_value FROM products A LEFT JOIN products_acquisition_value B ON A.nm_loja = B.loja AND A.seller_sku = B.seller_sku ORDER BY A.quantity DESC LIMIT $inicio,$limite";
     $sql_exec = $conn->query($query) or die("Falha na execução da consualta sql: ".$conn->error);
     $sql_cnt = $sql_exec->num_rows;
     
@@ -37,6 +37,7 @@
     if($sql_cnt > 0){
         print "<table class='table table-hover table-striped'>";
         print "<tr>";
+        print "<th>Loja</th>";
         print "<th>Produto</th>";
         print "<th>Seller SKU</th>";
         print "<th>asin</th>";
@@ -48,6 +49,7 @@
         print "</tr>";
         while($row = $sql_exec->fetch_object()){
             print "<tr>";
+            print "<td>".$row->nm_loja."</td>";
             print "<td>".$row->item_name."</td>";
             print "<td>".$row->seller_sku."</td>";
             print "<td>".$row->asin."</td>";
