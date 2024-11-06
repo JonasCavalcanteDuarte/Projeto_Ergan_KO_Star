@@ -24,27 +24,27 @@ $row = $sql_exec->fetch_object();
         <input type="hidden" name="asin" value="<?php print $row->asin;?>">
         <p>
             <label for="">Produto:</label>
-            <input type="text" name="produto" value="<?php print $row->item_name; ?>">
+            <input type="text" name="produto" value="<?php print $row->item_name; ?>" disabled= "" readonly>
         </p>
         <p>
             <label for="">Seller SKU:</label>
-            <input type="text" name="seller_sku" value="<?php print $row->seller_sku; ?>">
+            <input type="text" name="seller_sku" value="<?php print $row->seller_sku; ?>" disabled= "" readonly>
         </p>
         <p>
             <label for="">asin:</label>
-            <input type="text" name="asin" value="<?php print $row->asin; ?>">
+            <input type="text" name="asin" value="<?php print $row->asin; ?>" disabled= "" readonly>
         </p>
         <p>
             <label for="">Preço anunciado:</label>
-            <input type="text" name="preco_anunciado" value="<?php print $row->price; ?>">
+            <input type="text" name="preco_anunciado" value="<?php print $row->price; ?>" disabled= "" readonly>
         </p>
         <p>
             <label for="">Quantidade:</label>
-            <input type="text" name="quantidade" value="<?php print $row->quantity; ?>">
+            <input type="text" name="quantidade" value="<?php print $row->quantity; ?>" disabled= "" readonly>
         </p>
         <p>
             <label for="">DH Anuncio:</label>
-            <input type="text" name="dh_anuncio" value="<?php print $row->open_date; ?>">
+            <input type="text" name="dh_anuncio" value="<?php print $row->open_date; ?>" disabled= "" readonly>
         </p>
         <p>
             <label for="">Preço pago:</label>
