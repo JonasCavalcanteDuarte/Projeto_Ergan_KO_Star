@@ -2,7 +2,7 @@
 include('protect.php');
 include('conexao.php');
 
-$query = "SELECT * FROM products WHERE asin = ".$_REQUEST['asin']." LIMIT 1";
+$query = "SELECT A.*, B.acquisition_value FROM products A LEFT JOIN products_acquisition_value B ON A.nm_loja = B.loja AND A.seller_sku = B.seller_sku WHERE A.asin = '".$_REQUEST['asin']."' LIMIT 1";
 $sql_exec = $conn->query($query) or die("Falha na execução da consualta sql: ".$conn->error);
 $row = $sql_exec->fetch_object();
 
@@ -12,7 +12,7 @@ $row = $sql_exec->fetch_object();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="../css/style.css" rel="stylesheet" type="text/css" media="all"/>
+    <link href="../css/style_php.css" rel="stylesheet" type="text/css" media="all"/>
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <title>Editar produto:</title>
 </head>
@@ -48,7 +48,7 @@ $row = $sql_exec->fetch_object();
         </p>
         <p>
             <label for="">Preço pago:</label>
-            <input type="text" name="preco_pago" value="<?php print $row->acquisition_value; ?>>
+            <input type="text" name="preco_pago" value="<?php print $row->acquisition_value; ?>">
         </p>
         <p>
             <button type="submit">Atualizar dados</button>
