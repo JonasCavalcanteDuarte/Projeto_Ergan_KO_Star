@@ -18,25 +18,38 @@ $row = $sql_exec->fetch_object();
 </head>
 <body>
     <script src="../js/bootstrap.bundle.min.js"></script>
-    <h1>Altere as informações:</h1>
-    <form action="?page=gerirUsuario" method="POST">
-        <input type="hidden" name="acao" value="editar">
-        <input type="hidden" name="id" value="<?php print $row->id;?>">
-        <p>
-            <label for="">Nome:</label>
-            <input type="text" name="nome" value="<?php print $row->nome; ?>">
-        </p>
-        <p>
-            <label for="">E-mail:</label>
-            <input type="email" name="email" value="<?php print $row->email; ?>">
-        </p>
-        <p>
-            <label for="">Senha:</label>
-            <input type="password" name="senha" placeholder="Digite a senha atual ou uma nova senha" required>
-        </p>
-        <p>
-            <button type="submit">Atualizar dados</button>
-        </p>
-    </form>
+
+
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h2>Preencha o formulário:</h2>
+            </div>
+            <div class="card-body">
+                <!-- Formulário -->
+                <form action="?page=gerirUsuario" method="POST">
+                    <input type="hidden" name="acao" value="editar">
+                    <input type="hidden" name="id" value="<?php print $row->id;?>">
+                    <div class="mb-3">
+                        <label for="nome" class="form-label">Nome:</label>
+                        <input type="text" name="nome" value="<?php print $row->nome; ?>" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">E-mail:</label>
+                        <input type="email" name="email" value="<?php print $row->email; ?>" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="senha" class="form-label">Senha:</label>
+                        <input type="password" name="senha" placeholder="Digite a senha atual ou uma nova senha" name="r_token" class="form-control" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Atualizar dados <i class="fas fa-paper-plane"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    
 </body>
 </html>

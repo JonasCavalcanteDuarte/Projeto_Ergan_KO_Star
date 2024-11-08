@@ -10,6 +10,7 @@ include('protect.php');
     <link href="../css/style_php.css" rel="stylesheet" type="text/css" media="all"/>
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link rel="icon" href="../img/logo_browser.png">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
     <title>Painel</title>
 </head>
 <body>
@@ -27,7 +28,7 @@ include('protect.php');
                 <a class="nav-link" href="?page=listaUser">Gerenciar acessos</a>
                 <a class="nav-link" href="?page=altCredAMZ">Alterar credenciais API Amazon</a>
                 <a class="nav-link" href="?page=listarProdutos">Gerenciar Produtos</a>
-                <a class="nav-link" href="./dashboard.php">Dashboard</a>
+                <a class="nav-link" href="?page=dashboard">Dashboard</a>
                 <a class="nav-link" href="logout.php">Sair</a>
                 <!-- <a class="nav-link disabled" aria-disabled="true" href="#">Alterar credenciais API Amazon</a> -->
             </div>
@@ -35,8 +36,6 @@ include('protect.php');
         </div>
     </nav>
     <div class="container">
-        <div class="row">
-            <div class="col mt-5">
                 <?php
                     switch(@$_REQUEST["page"]){
                         case "cadastro":
@@ -71,12 +70,10 @@ include('protect.php');
                         print "<h1>Bem vindo ao painel, ".$_SESSION['user_name']."</h1>";
                     }
                 ?>
-            </div>
-        </div>
     </div>
 
-    <div class="copy_right">
-            <p>© Todos os direitos reservados.</p>
+    <div class="footer">
+            <p>© 2024 Todos os direitos reservados | Ergan & KO-Star</p>
     </div>
 </body>
 </html>

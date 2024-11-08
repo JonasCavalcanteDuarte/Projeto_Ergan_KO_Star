@@ -12,29 +12,44 @@ include('protect.php');
 </head>
 <body>
     <script src="../js/bootstrap.bundle.min.js"></script>
-    <h1>Preencha o formulário:</h1>
-    <form action="EfetCredAPI.php" method="POST">
-        <p>
-            <label>Loja:</label>
-            <select name="nm_loja" required>
-                <option value>Selecione</option>
-                <option value="KO-Star">KO-Star</option>
-                <option value="Ergan">Ergan</option>
-            </select>
-        </p>
-        <p>
-            <input type="text" placeholder="Client ID" name="client_id" required/>
-        </p>
-        <p>
-            <input type="text" placeholder="Client Secret" name="client_s" required/>
-        </p>
-        <p>
-            <input type="text" placeholder="Refresh Token" name="r_token" required/>
-        </p>
-        <p>
-            <button type="submit">Atualizar credenciais</button>
-        </p>
-    </form>
-    <p><a href="painel.php">Voltar para o painel</a></p>
+
+
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h2>Preencha o formulário:</h2>
+            </div>
+            <div class="card-body">
+                <!-- Formulário -->
+                <form action="EfetCredAPI.php" method="POST">
+                    <input type="hidden" name="acao" value="cadastrar">
+                    <div class="mb-3">
+                        <label for="nm_loja" class="form-label">Loja:</label>
+                        <select name="nm_loja" class="form-control" required>
+                            <option value>Selecione</option>
+                            <option value="KO-Star">KO-Star</option>
+                            <option value="Ergan">Ergan</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="client_id" class="form-label">Client ID:</label>
+                        <input type="text" placeholder="Client ID" name="client_id" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="client_s" class="form-label">Client Secret:</label>
+                        <input type="text" placeholder="Client Secret" name="client_s" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="r_token" class="form-label">Refresh Token:</label>
+                        <input type="text" placeholder="Refresh Token" name="r_token" class="form-control" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Atualizar credenciais <i class="fas fa-paper-plane"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
 </body>
 </html>

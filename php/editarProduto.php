@@ -18,41 +18,52 @@ $row = $sql_exec->fetch_object();
 </head>
 <body>
     <script src="../js/bootstrap.bundle.min.js"></script>
-    <h1>Altere as informações:</h1>
-    <form action="?page=gerirProduto" method="POST">
-        <input type="hidden" name="acao" value="editar">
-        <input type="hidden" name="asin" value="<?php print $row->asin;?>">
-        <p>
-            <label for="">Produto:</label>
-            <input type="text" name="produto" value="<?php print $row->item_name; ?>" disabled= "" readonly>
-        </p>
-        <p>
-            <label for="">Seller SKU:</label>
-            <input type="text" name="seller_sku" value="<?php print $row->seller_sku; ?>" disabled= "" readonly>
-        </p>
-        <p>
-            <label for="">asin:</label>
-            <input type="text" name="asin" value="<?php print $row->asin; ?>" disabled= "" readonly>
-        </p>
-        <p>
-            <label for="">Preço anunciado:</label>
-            <input type="text" name="preco_anunciado" value="<?php print $row->price; ?>" disabled= "" readonly>
-        </p>
-        <p>
-            <label for="">Quantidade:</label>
-            <input type="text" name="quantidade" value="<?php print $row->quantity; ?>" disabled= "" readonly>
-        </p>
-        <p>
-            <label for="">DH Anuncio:</label>
-            <input type="text" name="dh_anuncio" value="<?php print $row->open_date; ?>" disabled= "" readonly>
-        </p>
-        <p>
-            <label for="">Preço pago:</label>
-            <input type="text" name="preco_pago" value="<?php print $row->acquisition_value; ?>">
-        </p>
-        <p>
-            <button type="submit">Atualizar dados</button>
-        </p>
-    </form>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h2>Altere o preço de aquisição do produto:</h2>
+            </div>
+            <div class="card-body">
+                <!-- Formulário -->
+                <form action="?page=gerirProduto" method="POST">
+                    <input type="hidden" name="acao" value="editar">
+                    <input type="hidden" name="asin" value="<?php print $row->asin;?>">
+                    <div class="mb-3">
+                        <label for="produto" class="form-label">Produto:</label>
+                        <input type="text" name="produto" value="<?php print $row->item_name; ?>" disabled= "" class="form-control" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="seller_sku" class="form-label">Seller SKU:</label>
+                        <input type="text" name="seller_sku" value="<?php print $row->seller_sku; ?>" disabled= "" class="form-control" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="asin" class="form-label">asin:</label>
+                        <input type="text" name="asin" value="<?php print $row->asin; ?>" disabled= "" class="form-control" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="preco_anunciado" class="form-label">Preço anunciado:</label>
+                        <input type="text" name="preco_anunciado" value="<?php print $row->price; ?>" disabled= "" class="form-control" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="quantidade" class="form-label">Quantidade em estoque:</label>
+                        <input type="text" name="quantidade" value="<?php print $row->quantity; ?>" disabled= "" class="form-control" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="dh_anuncio" class="form-label">DH Anuncio:</label>
+                        <input type="text" name="dh_anuncio" value="<?php print $row->open_date; ?>" disabled= "" class="form-control" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="preco_pago" class="form-label">Preço pago:</label>
+                        <input type="text" name="preco_pago" value="<?php print $row->acquisition_value; ?>" class="form-control">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Atualizar dados <i class="fas fa-paper-plane"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
 </body>
 </html>
