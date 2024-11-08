@@ -27,7 +27,7 @@ include('protect.php');
                 <a class="nav-link" href="?page=listaUser">Gerenciar acessos</a>
                 <a class="nav-link" href="?page=altCredAMZ">Alterar credenciais API Amazon</a>
                 <a class="nav-link" href="?page=listarProdutos">Gerenciar Produtos</a>
-                <a class="nav-link" href="?page=dashboard">Dashboard</a>
+                <a class="nav-link" href="./dashboard.php">Dashboard</a>
                 <a class="nav-link" href="logout.php">Sair</a>
                 <!-- <a class="nav-link disabled" aria-disabled="true" href="#">Alterar credenciais API Amazon</a> -->
             </div>
