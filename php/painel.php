@@ -10,7 +10,10 @@ include('protect.php');
     <link href="../css/style_php.css" rel="stylesheet" type="text/css" media="all"/>
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link rel="icon" href="../img/logo_browser.png">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- chartjs-plugin-datalabels -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <title>Painel</title>
 </head>
 <body>
