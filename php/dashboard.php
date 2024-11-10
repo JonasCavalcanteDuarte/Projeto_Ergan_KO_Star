@@ -1,18 +1,29 @@
 <?php
     include('protect.php');
-    $timezone = new DateTimeZone('America/Sao_Paulo');
-    $agora = new DateTime('now', $timezone);
+    // Definir o fuso horário para 'America/Sao_Paulo'
+    date_default_timezone_set('America/Sao_Paulo');
 
+    // Criar um objeto DateTime para a data atual
+    $hoje = new DateTime();
+
+    // Obter o primeiro dia do mês atual
+    $primeiroDia = new DateTime($hoje->format('Y-m-01')); // Formato 'Y-m-01' define o primeiro dia do mês
+
+    // Obter o último dia do mês atual
+    $ultimoDia = new DateTime($hoje->format('Y-m-t')); // 't' retorna o último dia do mês
+
+    // Formatar as datas para o formato 'YYYY-MM-DD'
+    $primeiroDiaFormatado = $primeiroDia->format('Y-m-d');
+    $ultimoDiaFormatado = $ultimoDia->format('Y-m-d');
 ?>
 <body>
     <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
-    <script src="../php/dash.js"></script>
         <form id="date-filter">
             <label for="start-date">Data Inicial:</label>
-            <input type="date" id="start-date" name="start-date" value="<?php echo $agora->format('Y-m-d')?>">
+            <input type="date" id="start-date" name="start_date" value="<?php echo $primeiroDiaFormatado?>" required>
             
             <label for="end-date">Data Final:</label>
-            <input type="date" id="end-date" name="end-date" value="<?php echo $agora->format('Y-m-d')?>">
+            <input type="date" id="end-date" name="end_date" value="<?php echo $ultimoDiaFormatado?>" required>
             
             <button type="submit">Filtrar</button>
         </form>

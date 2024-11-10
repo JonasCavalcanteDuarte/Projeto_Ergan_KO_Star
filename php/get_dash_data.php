@@ -1,9 +1,30 @@
 <?php
     include('protect.php');
     include('conexao.php');
+    // Definir o fuso horário para 'America/Sao_Paulo'
+    date_default_timezone_set('America/Sao_Paulo');
+
+    // Criar um objeto DateTime para a data atual
+    $hoje = new DateTime();
+
+    // Obter o primeiro dia do mês atual
+    $primeiroDia = new DateTime($hoje->format('Y-m-01')); // Formato 'Y-m-01' define o primeiro dia do mês
+
+    // Obter o último dia do mês atual
+    $ultimoDia = new DateTime($hoje->format('Y-m-t')); // 't' retorna o último dia do mês
+
+    // Formatar as datas para o formato 'YYYY-MM-DD'
+    $primeiroDiaFormatado = $primeiroDia->format('Y-m-d');
+    $ultimoDiaFormatado = $ultimoDia->format('Y-m-d');
     
-    $query = "SELECT DATE_FORMAT(purchase_date, '%Y-%m-%d') AS dt, COUNT(DISTINCT amazon_order_id) AS QTD_PEDIDOS FROM order_details GROUP BY DATE_FORMAT(purchase_date, '%Y-%m-%d') ORDER BY 1;";
-    $sql_exec = $conn->query($query) or die("Falha na execução da consualta sql: ".$conn->error);
+    if(isset($_GET['start_date'])&&isset($_GET['end_date'])){
+        $query = "SELECT DATE_FORMAT(purchase_date, '%Y-%m-%d') AS dt, COUNT(DISTINCT amazon_order_id) AS QTD_PEDIDOS FROM order_details WHERE DATE_FORMAT(purchase_date, '%Y-%m-%d') >= '".$_GET['start_date']."' AND DATE_FORMAT(purchase_date, '%Y-%m-%d') <= '".$_GET['end_date']."' GROUP BY DATE_FORMAT(purchase_date, '%Y-%m-%d') ORDER BY 1;";
+        $sql_exec = $conn->query($query) or die("Falha na execução da consualta sql: ".$conn->error);
+    }else{
+        $query = "SELECT DATE_FORMAT(purchase_date, '%Y-%m-%d') AS dt, COUNT(DISTINCT amazon_order_id) AS QTD_PEDIDOS FROM order_details WHERE DATE_FORMAT(purchase_date, '%Y-%m-%d') >= '".$primeiroDiaFormatado."' AND DATE_FORMAT(purchase_date, '%Y-%m-%d') <= '".$ultimoDiaFormatado."' GROUP BY DATE_FORMAT(purchase_date, '%Y-%m-%d') ORDER BY 1;";
+        $sql_exec = $conn->query($query) or die("Falha na execução da consualta sql: ".$conn->error);
+    }
+    
     $dataArray = array();
 
     while ($linha = mysqli_fetch_assoc($sql_exec)) {

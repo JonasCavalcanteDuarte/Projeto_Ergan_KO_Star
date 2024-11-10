@@ -1,4 +1,28 @@
-var ctx = document.getElementById('myChart').getContext('2d');
+// Função para formatar a data no formato 'YYYY-MM-DD'
+function formatDate(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Garantir que o mês tenha 2 dígitos
+    const day = String(date.getDate()).padStart(2, '0'); // Garantir que o dia tenha 2 dígitos
+    return `${year}-${month}-${day}`;
+}
+  
+// Obter a data atual
+const hoje = new Date();
+
+// Primeiro dia do mês atual
+const primeiroDia = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+
+// Último dia do mês atual
+const ultimoDia = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+
+// Formatar as datas
+const primeiroDiaFormatado = formatDate(primeiroDia);
+const ultimoDiaFormatado = formatDate(ultimoDia);
+
+//console.log("Primeiro dia do mês:", primeiroDiaFormatado);
+//console.log("Último dia do mês:", ultimoDiaFormatado);
+
+var ctx = document.getElementById('myChart');
 var myChart;
 
 // Função para atualizar o gráfico com dados filtrados
@@ -35,7 +59,7 @@ function updateChart(startDate, endDate) {
 }
 
 
-var ctx2 = document.getElementById('myChart2').getContext('2d');
+var ctx2 = document.getElementById('myChart2');
 var myChart2;
 
 // Função para atualizar o gráfico com dados filtrados
@@ -69,7 +93,7 @@ function updateChart2(startDate, endDate) {
 }
 
 
-var ctx3 = document.getElementById('myChart3').getContext('2d');
+var ctx3 = document.getElementById('myChart3');
 var myChart3;
 
 // Função para atualizar o gráfico com dados filtrados
@@ -116,6 +140,6 @@ document.getElementById('date-filter').addEventListener('submit', function(e) {
 });
 
 // Carregar o gráfico com todos os dados inicialmente
-updateChart('', '');
-updateChart2('', '');
-updateChart3('2024-11-01', '2024-11-07');
+updateChart(primeiroDiaFormatado, ultimoDiaFormatado);
+updateChart2(primeiroDiaFormatado, ultimoDiaFormatado);
+updateChart3(primeiroDiaFormatado, ultimoDiaFormatado);
