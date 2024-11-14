@@ -2,7 +2,9 @@
     "name": "jonas/projeto_ergan_ko_star",
     "autoload": {
         "psr-4": {
-            "Jonas\\ProjetoErganKoStar\\": "src/"
+            "Jonas\\ProjetoErganKoStar\\": "src/",
+            "core\\": "core/",
+            "app\\": "app/"
         }
     },
     "authors": [
