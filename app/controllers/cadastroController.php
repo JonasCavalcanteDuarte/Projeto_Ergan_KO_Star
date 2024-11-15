@@ -2,6 +2,8 @@
 namespace app\controllers;
 require '../core/controller.php';
 use core\Controller;
+require_once '../app/models/userModel.php';
+use app\models\userModel;
 
 class cadastroController extends Controller{
 
@@ -16,6 +18,22 @@ class cadastroController extends Controller{
             header('Location: ../public/home');
             exit;
         }
+    }
+
+    public function cadastrar(){
+        $nome = str_replace(array("#","'",";","*"),'',$_POST['nome']);
+        $email = str_replace(array("#","'",";","*"),'',$_POST['email']);
+        $senha = str_replace(array("#","'",";","*"),'',$_POST['senha']);
+        $nivel = str_replace(array("#","'",";","*"),'',$_POST['nivel']);
+        
+        $result = userModel::create_user($nome, $email, $senha, $nivel);
+
+        print "<script>alert('Cadastrado com sucesso!');</script>";
+        print "<script>location.href='../painel';</script>";
+
+        //header('Location: ../painel');
+        exit;
+
     }
 
     public function index(){
