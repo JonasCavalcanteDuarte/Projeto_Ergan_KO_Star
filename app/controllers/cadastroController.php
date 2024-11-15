@@ -29,9 +29,7 @@ class cadastroController extends Controller{
         $result = userModel::create_user($nome, $email, $senha, $nivel);
 
         print "<script>alert('Cadastrado com sucesso!');</script>";
-        print "<script>location.href='../painel';</script>";
-
-        //header('Location: ../painel');
+        print "<script>location.href='../user';</script>";
         exit;
 
     }

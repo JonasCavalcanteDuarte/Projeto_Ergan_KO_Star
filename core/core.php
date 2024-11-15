@@ -8,7 +8,6 @@ Class Core{
         if(isset($_GET['pag'])){
             $url = $_GET['pag'];
         }
-    
         if(!empty($url)){
             $url = explode('/', $url);
             if($url[0]=='public'){

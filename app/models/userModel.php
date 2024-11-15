@@ -58,5 +58,20 @@ class UserModel {
         }
         
     }
+
+    public function getTotalUsers() {
+        $db = conexao::getInstance();
+        $stmt = $db->query("SELECT COUNT(*) FROM users");
+        return $stmt->fetchColumn();
+    }
+
+    public function getUsers($limit, $offset) {
+        $db = conexao::getInstance();
+        $stmt = $db->prepare("SELECT id,nome,email,nivel,dh_criacao FROM users LIMIT :limit OFFSET :offset");
+        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
 ?>
