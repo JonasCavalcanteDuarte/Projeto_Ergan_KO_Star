@@ -17,8 +17,14 @@ class Controller{
         }elseif($nomeView=='erro'){
             require '../app/views/template_erro.php';
         }else{
-            if(file_exists('../app/views/'.$nomeView.'.php')){
-                require '../app/views/template.php';
+            if (!isset($_SESSION['user_id'])) {
+                session_start();
+            }
+            if(file_exists('../app/views/'.$nomeView.'.php')&&$_SESSION['nivel']==1){
+                require '../app/views/template_nivelUm.php';
+                //echo "<script>console.log('Passei por aqui');</script>";
+            }elseif(file_exists('../app/views/'.$nomeView.'.php')&&$_SESSION['nivel']==2){
+                require '../app/views/template_nivelDois.php';
                 //echo "<script>console.log('Passei por aqui');</script>";
             }else{
                 require '../app/views/template_erro.php';
