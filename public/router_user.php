@@ -15,6 +15,10 @@ if ($_GET['pagina'] === 'gerenciar_acessos') {
     $controllerns = 'app\\controllers\\editUserController';
     $c = new $controllerns;
     $c->index($_GET['userId']);
+}elseif($_GET['pagina'] === 'excluir_usuario'){
+    $controllerns = 'app\\controllers\\editUserController';
+    $c = new $controllerns;
+    $c->deletarUsuario($_GET['userId']);
 }
 
 ?>

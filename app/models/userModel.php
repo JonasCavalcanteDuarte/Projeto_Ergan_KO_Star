@@ -98,15 +98,16 @@ class UserModel {
 
         $rowCount = $stmt->rowCount();
 
-        if($rowCount == 1){
-            echo "<script>alert('Usuário atualizado com sucesso!');</script>";
-            echo "<script>location.href='../user';</script>";
-            exit();
-        }else{
-            echo "<script>alert('Nenhum registro foi alterado, tente novamente mais tarde.');</script>";
-            echo "<script>location.href='../user';</script>";
-            exit();
-        }
+        return $rowCount;
+    }
+
+    public static function deleteUser($userId) {
+        $db = conexao::getInstance();
+        $stmt = $db->prepare("DELETE FROM users WHERE id = :userId");
+        $stmt->bindParam(':userId', $userId);
+        $stmt->execute();
+        $rowCount = $stmt->rowCount();
+        return $rowCount;
     }
 }
 ?>

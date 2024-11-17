@@ -35,7 +35,7 @@ $total_pages = $dadosPaginacao['total_pages'];
                         <?php
                         print "<td>
                                     <button onclick=\"location.href='../public/router_user.php?pagina=editar_usuario&userId=".$user['id']."';\"  class='btn btn-success'>Editar</button>
-                                    <button onclick=\"if(confirm('Tem certeza que deseja excluir este usuário?')){location.href='?page=gerirUsuario&acao=excluir&id=".$user['id']."';}else{false;}\"  class='btn btn-danger'>Excluir</button>
+                                    <button onclick=\"if(confirm('Tem certeza que deseja excluir este usuário?')){location.href='../public/router_user.php?pagina=excluir_usuario&userId=".$user['id']."';}else{false;}\"  class='btn btn-danger'>Excluir</button>
                                 </td>";
                         ?>
                     </tr>

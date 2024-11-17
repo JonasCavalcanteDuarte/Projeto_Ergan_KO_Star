@@ -15,11 +15,11 @@ class editUserController extends Controller{
         if (!isset($_SESSION['user_id'])) {
             // Caso não esteja logado, redirecionar para a página de login
             header('Location: ../public/home');
-            exit;
+            exit();
         }
     }
 
-    public function editar(){
+    public function editarUsuario(){
         $userId = str_replace(array("#","'",";","*"),'',$_POST['id']);
         $nome = str_replace(array("#","'",";","*"),'',$_POST['nome']);
         $email = str_replace(array("#","'",";","*"),'',$_POST['email']);
@@ -28,9 +28,31 @@ class editUserController extends Controller{
         
         $result = userModel::updateUser($userId, $nome, $email, $senha, $nivel);
 
-        print "<script>alert('Editado com sucesso!');</script>";
-        print "<script>location.href='../user';</script>";
-        exit;
+        if($result == 1){
+            echo "<script>alert('Usuário atualizado com sucesso!');</script>";
+            echo "<script>location.href='../user';</script>";
+            exit();
+        }else{
+            echo "<script>alert('Nenhum registro foi alterado, tente novamente mais tarde.');</script>";
+            echo "<script>location.href='../user';</script>";
+            exit();
+        }
+    }
+
+    public function deletarUsuario($userId){
+        $userToDetele = str_replace(array("#","'",";","*"),'',$userId);
+        
+        $result = userModel::deleteUser($userToDetele);
+
+        if($result == 1){
+            echo "<script>alert('Usuário excluido com sucesso!');</script>";
+            echo "<script>location.href='./user';</script>";
+            exit();
+        }else{
+            echo "<script>alert('Nenhum registro foi excluido, tente novamente mais tarde.');</script>";
+            echo "<script>location.href='./user';</script>";
+            exit();
+        }
 
     }
 

@@ -5,7 +5,7 @@
             </div>
             <div class="card-body">
                 <!-- Formulário -->
-                <form action="./editUser/editar" method="POST">
+                <form action="./editUser/editarUsuario" method="POST">
                     <input type="hidden" name="id" value="<?php echo $dadosModel['id'];?>">
                     <div class="mb-3">
                         <label for="nome" class="form-label">Nome:</label>
