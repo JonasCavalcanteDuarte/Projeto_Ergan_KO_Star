@@ -24,6 +24,7 @@ class editUserController extends Controller{
         $nome = str_replace(array("#","'",";","*"),'',$_POST['nome']);
         $email = str_replace(array("#","'",";","*"),'',$_POST['email']);
         $senha = str_replace(array("#","'",";","*"),'',$_POST['senha']);
+        $senha = password_hash($senha, PASSWORD_DEFAULT);
         $nivel = str_replace(array("#","'",";","*"),'',$_POST['nivel']);
         
         $result = userModel::updateUser($userId, $nome, $email, $senha, $nivel);
