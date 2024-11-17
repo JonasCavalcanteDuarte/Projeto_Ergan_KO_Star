@@ -35,7 +35,7 @@ $controller = new LoginController();
             </div>
         </div>
         <div class="footer-text">
-            <p><small><a href="#">Esqueceu a senha?</a></small></p>
+            <!--<p><small><a href="#">Esqueceu a senha?</a></small></p>-->
             <div id="emailHelp" class="form-text">Não compartilhe seus dados de acesso com outras pessoas.</div>
         </div>
     </div>

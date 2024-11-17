@@ -22,7 +22,10 @@ nome varchar(100) not null,
 email varchar(100) not null unique,
 senha varchar(255) not null,
 nivel int,
-dh_criacao timestamp
+dh_criacao timestamp,
+dh_ultima_modificacao timestamp,
+criado_por varchar(20),
+alterado_por varchar(20)
 );
 
 CREATE TABLE credenciais_amz(

@@ -1,5 +1,5 @@
 <?php
-namespace core;
+namespace public;
 
 // Iniciar a sessão
 session_start();
