@@ -65,7 +65,9 @@ CREATE TABLE products_acquisition_value(
 loja VARCHAR(20),
 seller_sku VARCHAR(100),
 asin VARCHAR(50),
-acquisition_value VARCHAR(6)
+acquisition_value VARCHAR(6),
+dh_last_update timestamp,
+alterado_por varchar(20)
 );
 
 ALTER TABLE products_acquisition_value
