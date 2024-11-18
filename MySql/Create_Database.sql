@@ -33,7 +33,8 @@ nm_loja varchar(100),
 client_id varchar(255),
 client_secret varchar(255),
 refresh_token varchar(1000),
-dh_last_update timestamp
+dh_last_update timestamp,
+alterado_por varchar(20)
 );
 
 /*
