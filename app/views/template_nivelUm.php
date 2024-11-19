@@ -32,7 +32,7 @@
                 <a class="nav-link" href="../public/user">Gerenciar acessos</a>
                 <a class="nav-link" href="../public/credAPI">Gerenciar credenciais API</a>
                 <a class="nav-link" href="../public/product">Gerenciar Produtos</a>
-                <a class="nav-link" href="?page=dashboard">Dashboard</a>
+                <a class="nav-link" href="../public/dashboard">Dashboard</a>
                 <a class="nav-link" href="../public/login/logout">Sair</a>
                 <!-- <a class="nav-link disabled" aria-disabled="true" href="#">Alterar credenciais API Amazon</a> -->
             </div>

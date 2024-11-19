@@ -28,7 +28,7 @@
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
                 <a class="nav-link active" aria-current="page" href="../public/painel">Painel</a>
-                <a class="nav-link" href="?page=dashboard">Dashboard</a>
+                <a class="nav-link" href="../public/dashboard">Dashboard</a>
                 <a class="nav-link" href="../public/login/logout">Sair</a>
                 <!-- <a class="nav-link disabled" aria-disabled="true" href="#">Alterar credenciais API Amazon</a> -->
             </div>
