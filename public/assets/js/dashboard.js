@@ -171,75 +171,72 @@ var ctx3 = document.getElementById('qtdProdVendidos');
 var ChartqtdProdVendidos;
 
 // Função para atualizar o gráfico com dados filtrados
-function updateChart3(startDate, endDate, orderBy) {
+function updateChart3() {
+    const productSalesData = JSON.parse(document.getElementById('productSalesData').textContent);
+
+    const sku = productSalesData.sku;
+    const qtdProdutos = productSalesData.qtdProdutos;
+
     var chart = "qtdProdVendidos";
-    fetch('./get_dash_data.php?start_date=' + startDate + '&end_date=' + endDate + '&chart=' + chart + '&order_by_clause=' + orderBy)
-        .then(response => response.json())
-        .then(data => {
-            if (ChartqtdProdVendidos) {
-                ChartqtdProdVendidos.destroy();
-            }
-            
-            ChartqtdProdVendidos = new Chart(ctx3, {
-                type: 'bar',
-                data: {
-                    labels: data.labels,
-                    datasets: [{
-                        label: 'Qtd vendida',
-                        data: data.values,
-                        backgroundColor: 'rgba(43, 71, 252, 0.7)'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    indexAxis: 'y',
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: 'Quantidade de produtos por SKU',
-                            align: 'start',
-                            color: 'black',
-                            font: {
-                                weight: 'bold',
-                                size: 15
-                            }
-                        },
-                        datalabels: {
-                            color: 'black', // Cor do texto dos rótulos
-                            font: {
-                              weight: 'bold', // Peso da fonte
-                              size: 14 // Tamanho da fonte
-                            },
-                            anchor: 'end', // Posição do rótulo em relação à barra
-                            offset: -1,
-                            align: 'end', // Alinhar o rótulo ao topo
-                            formatter: function(value) {
-                              return value; // Exibe o valor do dado
-                            }
-                        },
-                        legend: {
-                            display: true,
-                            position: 'top',
-                            align: 'start'
-                        }
-                    },
-                    scales: {
-                        x: {
-                            grid: {
-                              display: false
-                            }
-                          },
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                display: false
-                              }
-                        }
+    ChartqtdProdVendidos = new Chart(ctx3, {
+        type: 'bar',
+        data: {
+            labels: sku,
+            datasets: [{
+                label: 'Qtd vendida',
+                data: qtdProdutos,
+                backgroundColor: 'rgba(43, 71, 252, 0.7)'
+            }]
+        },
+        options: {
+            responsive: true,
+            indexAxis: 'y',
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Quantidade de produtos por SKU',
+                    align: 'start',
+                    color: 'black',
+                    font: {
+                        weight: 'bold',
+                        size: 15
                     }
                 },
-                plugins: [ChartDataLabels] // Incluindo o plugin de rótulos de dados
-            });
-        });
+                datalabels: {
+                    color: 'black', // Cor do texto dos rótulos
+                    font: {
+                        weight: 'bold', // Peso da fonte
+                        size: 14 // Tamanho da fonte
+                    },
+                    anchor: 'end', // Posição do rótulo em relação à barra
+                    offset: -1,
+                    align: 'end', // Alinhar o rótulo ao topo
+                    formatter: function(value) {
+                        return value; // Exibe o valor do dado
+                    }
+                },
+                legend: {
+                    display: true,
+                    position: 'top',
+                    align: 'start'
+                }
+            },
+            scales: {
+                x: {
+                    grid: {
+                        display: false
+                    }
+                    },
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        display: false
+                        }
+                }
+            }
+        },
+        plugins: [ChartDataLabels] // Incluindo o plugin de rótulos de dados
+    });
 }
 
 var ctx4 = document.getElementById('vlVendas');
@@ -247,74 +244,73 @@ var ChartvlVendas;
 
 // Função para atualizar o gráfico com dados filtrados
 function updateChart4(startDate, endDate) {
-    var chart = "vlVendas";
-    fetch('./get_dash_data.php?start_date=' + startDate + '&end_date=' + endDate + '&chart=' + chart)
-        .then(response => response.json())
-        .then(data => {
-            if (ChartvlVendas) {
-                ChartvlVendas.destroy();
-            }
+    const orderValuesData = JSON.parse(document.getElementById('orderValuesData').textContent);
+
+    const datas = orderValuesData.datas;
+    const vlPedidos = orderValuesData.vlPedidos;
+
+
+    var chart = "vlVendas";//orderValuesData
             
-            ChartvlVendas = new Chart(ctx4, {
-                type: 'bar',
-                grid: false,
-                data: {
-                    labels: data.labels,
-                    datasets: [{
-                        label: 'Valor Pedidos',
-                        data: data.values,
-                        backgroundColor: 'rgba(43, 71, 252, 0.7)'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: 'Valor total de pedidos por data',
-                            align: 'start',
-                            color: 'black',
-                            font: {
-                                weight: 'bold',
-                                size: 15
-                            }
-                        },
-                        datalabels: {
-                            display: 'auto',
-                            color: 'black', // Cor do texto dos rótulos
-                            font: {
-                              weight: 'bold', // Peso da fonte
-                              size: 14 // Tamanho da fonte
-                            },
-                            anchor: 'end', // Posição do rótulo em relação à barra
-                            align: 'top', // Alinhar o rótulo ao topo
-                            formatter: function(value) {
-                              return value; // Exibe o valor do dado
-                            }
-                        },
-                        legend: {
-                            display: true,
-                            position: 'top',
-                            align: 'start'
-                        }
-                    },
-                    scales: {
-                        x: {
-                            grid: {
-                              display: false
-                            }
-                          },
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                display: false
-                              }
-                        }
+    ChartvlVendas = new Chart(ctx4, {
+        type: 'bar',
+        grid: false,
+        data: {
+            labels: datas,
+            datasets: [{
+                label: 'Valor Pedidos',
+                data: vlPedidos,
+                backgroundColor: 'rgba(43, 71, 252, 0.7)'
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Valor total de pedidos por data',
+                    align: 'start',
+                    color: 'black',
+                    font: {
+                        weight: 'bold',
+                        size: 15
                     }
                 },
-                plugins: [ChartDataLabels] // Incluindo o plugin de rótulos de dados
-            });
-        });
+                datalabels: {
+                    display: 'auto',
+                    color: 'black', // Cor do texto dos rótulos
+                    font: {
+                        weight: 'bold', // Peso da fonte
+                        size: 14 // Tamanho da fonte
+                    },
+                    anchor: 'end', // Posição do rótulo em relação à barra
+                    align: 'top', // Alinhar o rótulo ao topo
+                    formatter: function(value) {
+                        return value; // Exibe o valor do dado
+                    }
+                },
+                legend: {
+                    display: true,
+                    position: 'top',
+                    align: 'start'
+                }
+            },
+            scales: {
+                x: {
+                    grid: {
+                        display: false
+                    }
+                    },
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        display: false
+                        }
+                }
+            }
+        },
+        plugins: [ChartDataLabels] // Incluindo o plugin de rótulos de dados
+    });
 }
 
 
@@ -323,76 +319,73 @@ var ChartqtdOrderPayment;
 
 // Função para atualizar o gráfico com dados filtrados
 function updateChart5(startDate, endDate) {
+    const ordersPaymentData = JSON.parse(document.getElementById('ordersPaymentData').textContent);
+
+    const paymentMethod = ordersPaymentData.paymentMethod;
+    const qtdPedidos = ordersPaymentData.qtdPedidos;
+
     var chart = "OrderPayment";
-    fetch('./get_dash_data.php?start_date=' + startDate + '&end_date=' + endDate + '&chart=' + chart)
-        .then(response => response.json())
-        .then(data => {
-            if (ChartqtdOrderPayment) {
-                ChartqtdOrderPayment.destroy();
-            }
-            
-            ChartqtdOrderPayment = new Chart(ctx5, {
-                type: 'bar',
-                grid: false,
-                data: {
-                    labels: data.labels,
-                    datasets: [{
-                        label: 'Qtd Pedidos',
-                        data: data.values,
-                        backgroundColor: 'rgba(43, 71, 252, 0.7)'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    indexAxis: 'y',
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: 'Quantidade de pedidos por método de pagamento',
-                            align: 'start',
-                            color: 'black',
-                            font: {
-                                weight: 'bold',
-                                size: 15
-                            }
-                        },
-                        datalabels: {
-                            //display: 'auto',
-                            color: 'black', // Cor do texto dos rótulos
-                            font: {
-                              weight: 'bold', // Peso da fonte
-                              size: 14 // Tamanho da fonte
-                            },
-                            anchor: 'end', // Posição do rótulo em relação à barra
-                            offset: -1,
-                            align: 'end', // Alinhar o rótulo ao topo
-                            formatter: function(value) {
-                              return value; // Exibe o valor do dado
-                            }
-                        },
-                        legend: {
-                            display: true,
-                            position: 'top',
-                            align: 'start'
-                        }
-                    },
-                    scales: {
-                        x: {
-                            grid: {
-                              display: false
-                            }
-                          },
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                display: false
-                              }
-                        }
+    ChartqtdOrderPayment = new Chart(ctx5, {
+        type: 'bar',
+        grid: false,
+        data: {
+            labels: paymentMethod,
+            datasets: [{
+                label: 'Qtd Pedidos',
+                data: qtdPedidos,
+                backgroundColor: 'rgba(43, 71, 252, 0.7)'
+            }]
+        },
+        options: {
+            responsive: true,
+            indexAxis: 'y',
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Quantidade de pedidos por método de pagamento',
+                    align: 'start',
+                    color: 'black',
+                    font: {
+                        weight: 'bold',
+                        size: 15
                     }
                 },
-                plugins: [ChartDataLabels] // Incluindo o plugin de rótulos de dados
-            });
-        });
+                datalabels: {
+                    //display: 'auto',
+                    color: 'black', // Cor do texto dos rótulos
+                    font: {
+                        weight: 'bold', // Peso da fonte
+                        size: 14 // Tamanho da fonte
+                    },
+                    anchor: 'end', // Posição do rótulo em relação à barra
+                    offset: -1,
+                    align: 'end', // Alinhar o rótulo ao topo
+                    formatter: function(value) {
+                        return value; // Exibe o valor do dado
+                    }
+                },
+                legend: {
+                    display: true,
+                    position: 'top',
+                    align: 'start'
+                }
+            },
+            scales: {
+                x: {
+                    grid: {
+                        display: false
+                    }
+                    },
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        display: false
+                        }
+                }
+            }
+        },
+        plugins: [ChartDataLabels] // Incluindo o plugin de rótulos de dados
+    });
 }
 
 // Carregar o gráfico com todos os dados inicialmente

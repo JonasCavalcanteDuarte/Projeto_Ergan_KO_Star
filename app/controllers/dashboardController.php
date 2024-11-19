@@ -36,13 +36,28 @@ class dashboardController  extends Controller{
             $datasFiltro['end_date'] = '';
         }
 
+
+        if(isset($_POST['orderBy'])){
+            $orderBy = $_POST['orderBy'];
+            $orderByFiltro['orderBy'] = $orderBy;
+        }else{
+            $orderBy = '';
+            $orderByFiltro['orderBy'] = '';
+        }
         // Obtém os dados das vendas
         $qtdOrdersData = $this->dashboardModel->qtdOrders($dt_ini,$dt_fim);
-        $qtdOrdersStatusData = $this->dashboardModel->qtdOrderStatus($dt_ini,$dt_fim);
+        $qtdOrderStatusData = $this->dashboardModel->qtdOrderStatus($dt_ini,$dt_fim);
+        $vlOrdersData = $this->dashboardModel->qtdOrderValues($dt_ini,$dt_fim);
+        $qtdOrdersPaymentData = $this->dashboardModel->qtdOrderPayment($dt_ini,$dt_fim);
+        $qtdProductSalesData = $this->dashboardModel->qtdProductSales($dt_ini,$dt_fim,$orderBy);
 
         $results['datasFiltro'] = $datasFiltro;
+        $results['orderByFiltro'] = $orderByFiltro;
         $results['qtdOrders'] = $qtdOrdersData;
-        $results['qtdOrderStatus'] = $qtdOrdersStatusData;
+        $results['qtdOrderStatus'] = $qtdOrderStatusData;
+        $results['vlOrders'] = $vlOrdersData;
+        $results['qtdOrdersPayment'] = $qtdOrdersPaymentData;
+        $results['qtdProductSales'] = $qtdProductSalesData;
 
         // Inclui a view e passa os dados para ela
         $this->carregarTemplate('dashboard',$results);

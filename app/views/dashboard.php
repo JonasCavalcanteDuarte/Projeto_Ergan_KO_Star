@@ -30,6 +30,27 @@ if($dadosModel['datasFiltro']['start_date']!=''){
         'qtdPedidos' => $dadosModel['qtdOrderStatus']['qtdPedidos']
     ]); ?>
 </script>
+<!-- Passando os dados para o JavaScript -->
+<script type="application/json" id="orderValuesData">
+    <?php echo json_encode([
+        'datas' => $dadosModel['vlOrders']['datas'],
+        'vlPedidos' => $dadosModel['vlOrders']['vlPedidos']
+    ]); ?>
+</script>
+<!-- Passando os dados para o JavaScript -->
+<script type="application/json" id="ordersPaymentData">
+    <?php echo json_encode([
+        'paymentMethod' => $dadosModel['qtdOrdersPayment']['paymentMethod'],
+        'qtdPedidos' => $dadosModel['qtdOrdersPayment']['qtdPedidos']
+    ]); ?>
+</script>
+<!-- Passando os dados para o JavaScript -->
+<script type="application/json" id="productSalesData">
+    <?php echo json_encode([
+        'sku' => $dadosModel['qtdProductSales']['sku'],
+        'qtdProdutos' => $dadosModel['qtdProductSales']['qtdProdutos']
+    ]); ?>
+</script>
 <div class="container mt-5" style="margin-bottom:10px">
         <form id="date-filter" action="../dashboard/index" method="POST">
             <div class="row">
@@ -70,10 +91,11 @@ if($dadosModel['datasFiltro']['start_date']!=''){
             </div>
             <div class="row" style="margin-top:50px">
                 <div class="col-sm-12">
-                    <form id="orderby-filter">
+                    <form id="orderby-filter" action="../dashboard/index" method="POST">
                         <div class="row">
                             <div class="col-sm-10 col-md-10 col-lg-10">
-                                <select id= "order_by_clause" name="order_by_clause" class="form-control" required>
+                                <select id= "order_by_clause" name="orderBy" class="form-control" required>
+                                    <option value="<?php echo $dadosModel['orderByFiltro']['orderBy']?>"><?php if($dadosModel['orderByFiltro']['orderBy']=='DESC'||$dadosModel['orderByFiltro']['orderBy']==''){echo '10 Mais vendidos';}else{echo '10 Menos vendidos';}?></option>
                                     <option value="DESC">10 Mais vendidos</option>
                                     <option value="ASC">10 Menos vendidos</option>
                                 </select>
@@ -90,3 +112,17 @@ if($dadosModel['datasFiltro']['start_date']!=''){
             </div>
         </div>
     </div>
+    <script>
+        // Função para salvar a posição do scroll
+        window.addEventListener('beforeunload', function () {
+            sessionStorage.setItem('scrollPosition', window.scrollY);
+        });
+
+        // Função para restaurar a posição do scroll
+        window.addEventListener('load', function () {
+            const savedPosition = sessionStorage.getItem('scrollPosition');
+            if (savedPosition) {
+                window.scrollTo(0, savedPosition); // Restaura a posição do scroll
+            }
+        });
+    </script>
