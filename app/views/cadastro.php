@@ -36,7 +36,7 @@
                 </div>
                 <div class="mb-3" id="loja">
                     <label for="loja" class="form-label">Terá acesso a qual loja?</label>
-                    <select name="loja" class="form-control" required>
+                    <select id="select_loja" name="loja" class="form-control" required>
                         <option value>Selecione</option>
                         <?php
                         if($dadosModel['accessStore'][0]['loja_acesso']=='Ambas'){
@@ -62,15 +62,18 @@
     // Captura o select e o campo condicional
     const select = document.getElementById('nivel');
     const campoCondicional = document.getElementById('loja');
+    const campoLoja = document.getElementById('select_loja');
 
     // Função para verificar a seleção e mostrar/esconder o campo
     select.addEventListener('change', function() {
         if (select.value === '3' || select.value === '4') {
             // Exibe o campo condicional quando a opção "3" ou "4" for selecionada
             campoCondicional.style.display = 'block';
+            campoLoja.setAttribute('required', 'required');
         } else {
             // Caso contrário, esconde o campo
             campoCondicional.style.display = 'none';
+            campoLoja.removeAttribute('required');
         }
     });
 </script>

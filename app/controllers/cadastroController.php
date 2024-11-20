@@ -25,7 +25,7 @@ class cadastroController extends Controller{
         $email = str_replace(array("#","'",";","*"),'',$_POST['email']);
         $senha = str_replace(array("#","'",";","*"),'',$_POST['senha']);
         $nivel = str_replace(array("#","'",";","*"),'',$_POST['nivel']);
-        if(isset($_POST['loja'])){
+        if(isset($_POST['loja'])&&$_POST['loja']!=''){
             $loja = str_replace(array("#","'",";","*"),'',$_POST['loja']);
         }else{
             $loja = 'Ambas';
