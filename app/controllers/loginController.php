@@ -17,6 +17,7 @@ class LoginController {
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['user_name'] = $user['nome'];
                 $_SESSION['nivel'] = $user['nivel'];
+                $_SESSION['loja_acesso'] = $user['loja_acesso'];
                 $_SESSION['time']=time();
                 header('Location: ../painel');
                 exit;

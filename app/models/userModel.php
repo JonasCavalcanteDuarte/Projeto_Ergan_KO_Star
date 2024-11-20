@@ -8,7 +8,7 @@ class UserModel {
 
     public static function authenticate($email, $password) {
         $db = conexao::getInstance();
-        $stmt = $db->prepare('SELECT id,nome,email,senha,nivel FROM users WHERE email = :email LIMIT 1');
+        $stmt = $db->prepare('SELECT id,nome,email,senha,nivel, loja_acesso FROM users WHERE email = :email LIMIT 1');
         $stmt->bindParam(':email', $email);
         $stmt->execute();
         
@@ -64,16 +64,37 @@ class UserModel {
 
     public function getTotalUsers() {
         $db = conexao::getInstance();
-        $stmt = $db->query("SELECT COUNT(*) FROM users");
+        if(!isset($_SESSION['user_id'])){
+            session_start();
+        }
+        if($_SESSION['loja_acesso'] == 'Ambas'){
+            $stmt = $db->query("SELECT COUNT(*) FROM users");
+        }else{
+            $stmt = $db->prepare("SELECT COUNT(*) FROM users WHERE loja_acesso = :loja_acesso");
+            $stmt->bindParam(':loja_acesso', $_SESSION['loja_acesso']);
+            $stmt->execute();
+        }
         return $stmt->fetchColumn();
     }
 
     public function getUsers($limit, $offset) {
         $db = conexao::getInstance();
-        $stmt = $db->prepare("SELECT id,nome,email,nivel,dh_criacao,dh_ultima_modificacao,criado_por,alterado_por, loja_acesso FROM users LIMIT :limit OFFSET :offset");
-        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
-        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
-        $stmt->execute();
+        if(!isset($_SESSION['user_id'])){
+            session_start();
+        }
+
+        if($_SESSION['loja_acesso'] == 'Ambas'){
+            $stmt = $db->prepare("SELECT id,nome,email,nivel,dh_criacao,dh_ultima_modificacao,criado_por,alterado_por, loja_acesso FROM users LIMIT :limit OFFSET :offset");
+            $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+            $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+            $stmt->execute();
+        }else{
+            $stmt = $db->prepare("SELECT id,nome,email,nivel,dh_criacao,dh_ultima_modificacao,criado_por,alterado_por, loja_acesso FROM users WHERE loja_acesso = :loja_acesso LIMIT :limit OFFSET :offset");
+            $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+            $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+            $stmt->bindParam(':loja_acesso', $_SESSION['loja_acesso']);
+            $stmt->execute();
+        }
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
