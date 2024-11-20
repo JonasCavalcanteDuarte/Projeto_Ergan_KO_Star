@@ -59,10 +59,15 @@ class editUserController extends Controller{
 
     public function index($userId){
         //chama um model
-        $result = userModel::getUserInfo($userId);
+        $userInfo = userModel::getUserInfo($userId);
+        $accessLevels = userModel::getUserAccessLevel();
+
+        $results['userInfo'] = $userInfo;
+        $results['accessLevels'] = $accessLevels;
+
 
         //chama uma view
-        $this->carregarTemplate('editarUsuario',$result);
+        $this->carregarTemplate('editarUsuario',$results);
 
         //faz a junção de backend com frontend
     }

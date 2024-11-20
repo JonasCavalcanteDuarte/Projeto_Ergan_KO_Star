@@ -25,8 +25,13 @@ class cadastroController extends Controller{
         $email = str_replace(array("#","'",";","*"),'',$_POST['email']);
         $senha = str_replace(array("#","'",";","*"),'',$_POST['senha']);
         $nivel = str_replace(array("#","'",";","*"),'',$_POST['nivel']);
+        if(isset($_POST['loja'])){
+            $loja = str_replace(array("#","'",";","*"),'',$_POST['loja']);
+        }else{
+            $loja = 'Ambas';
+        }
         
-        $result = userModel::create_user($nome, $email, $senha, $nivel);
+        $result = userModel::create_user($nome, $email, $senha, $nivel, $loja);
 
         print "<script>alert('Cadastrado com sucesso!');</script>";
         print "<script>location.href='../user';</script>";
@@ -36,9 +41,9 @@ class cadastroController extends Controller{
 
     public function index(){
         //chama um model
-        //--------------
+        $result = userModel::getUserAccessLevel();
         //chama uma view
-        $this->carregarTemplate('cadastro');
+        $this->carregarTemplate('cadastro',$result);
 
         //faz a junção de backend com frontend
     }

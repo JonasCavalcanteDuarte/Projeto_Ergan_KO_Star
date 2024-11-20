@@ -20,10 +20,10 @@ class Controller{
             if (!isset($_SESSION['user_id'])) {
                 session_start();
             }
-            if(file_exists('../app/views/'.$nomeView.'.php')&&$_SESSION['nivel']==1){
+            if(file_exists('../app/views/'.$nomeView.'.php')&&($_SESSION['nivel']==1||$_SESSION['nivel']==3)){
                 require '../app/views/template_nivelUm.php';
                 //echo "<script>console.log('Passei por aqui');</script>";
-            }elseif(file_exists('../app/views/'.$nomeView.'.php')&&$_SESSION['nivel']==2){
+            }elseif(file_exists('../app/views/'.$nomeView.'.php')&&($_SESSION['nivel']==2||$_SESSION['nivel']==4)){
                 require '../app/views/template_nivelDois.php';
                 //echo "<script>console.log('Passei por aqui');</script>";
             }else{

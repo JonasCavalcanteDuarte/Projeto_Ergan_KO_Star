@@ -14,6 +14,7 @@ $total_pages = $dadosPaginacao['total_pages'];
                     <th>Nome</th>
                     <th>Email</th>
                     <th>Nivel acesso</th>
+                    <th>Loja</th>
                     <th>Criado em</th>
                     <th>Criado por</th>
                     <th>Alterado em</th>
@@ -28,6 +29,7 @@ $total_pages = $dadosPaginacao['total_pages'];
                         <td><?php echo $user['nome']; ?></td>
                         <td><?php echo $user['email']; ?></td>
                         <td><?php echo $user['nivel']; ?></td>
+                        <td><?php echo $user['loja_acesso']; ?></td>
                         <td><?php echo $user['dh_criacao']; ?></td>
                         <td><?php echo $user['criado_por']; ?></td>
                         <td><?php echo $user['dh_ultima_modificacao']; ?></td>

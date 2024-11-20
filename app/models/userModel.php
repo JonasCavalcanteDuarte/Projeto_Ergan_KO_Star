@@ -21,7 +21,7 @@ class UserModel {
         return false;
     }
 
-    public static function create_user($nome, $email, $senha, $nivel) {
+    public static function create_user($nome, $email, $senha, $nivel, $loja) {
         $db = conexao::getInstance();
         // Calculando o hash da senha
         $hashedPassword = password_hash($senha, PASSWORD_DEFAULT);
@@ -36,12 +36,13 @@ class UserModel {
             try {
                 // Tenta executar a consulta
                 $userData = $_SESSION['user_name']." ID: ".$_SESSION['user_id'];
-                $stmt = $db->prepare('INSERT INTO users (nome,email, senha, nivel, dh_criacao,criado_por) VALUES (:nome, :email, :senha, :nivel, now(),:criado_por)');
+                $stmt = $db->prepare('INSERT INTO users (nome,email, senha, nivel, dh_criacao,criado_por, loja_acesso) VALUES (:nome, :email, :senha, :nivel, now(),:criado_por, :loja_acesso)');
                 $stmt->bindParam(':nome', $nome);
                 $stmt->bindParam(':email', $email);
                 $stmt->bindParam(':senha', $hashedPassword);
                 $stmt->bindParam(':nivel', $nivel);
                 $stmt->bindParam(':criado_por', $userData);
+                $stmt->bindParam(':loja_acesso', $loja);
                 $stmt->execute();
             } catch (PDOException $e) {
                 // Loga o erro (recomendado para produção)
@@ -69,7 +70,7 @@ class UserModel {
 
     public function getUsers($limit, $offset) {
         $db = conexao::getInstance();
-        $stmt = $db->prepare("SELECT id,nome,email,nivel,dh_criacao,dh_ultima_modificacao,criado_por,alterado_por FROM users LIMIT :limit OFFSET :offset");
+        $stmt = $db->prepare("SELECT id,nome,email,nivel,dh_criacao,dh_ultima_modificacao,criado_por,alterado_por, loja_acesso FROM users LIMIT :limit OFFSET :offset");
         $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
         $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
         $stmt->execute();
@@ -109,5 +110,26 @@ class UserModel {
         $rowCount = $stmt->rowCount();
         return $rowCount;
     }
+
+    public static function getUserAccessLevel() {
+        $db = conexao::getInstance();
+        $stmt = $db->prepare("SELECT level_access,level_description FROM user_access_level");
+        $stmt->execute();
+        $accessLevel = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if(!isset($_SESSION['user_id'])){
+            session_start();
+        }
+        $stmt = $db->prepare("SELECT loja_acesso FROM users WHERE id = :id");
+        $stmt->bindParam(':id', $_SESSION['user_id']);
+        $stmt->execute();
+        $accessStore = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $results['accessLevel'] = $accessLevel;
+        $results['accessStore'] = $accessStore;
+
+        return $results;
+    }
+
 }
 ?>
