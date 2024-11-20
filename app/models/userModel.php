@@ -134,13 +134,14 @@ class UserModel {
 
     public static function getUserAccessLevel() {
         $db = conexao::getInstance();
-        $stmt = $db->prepare("SELECT level_access,level_description FROM user_access_level");
-        $stmt->execute();
-        $accessLevel = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
         if(!isset($_SESSION['user_id'])){
             session_start();
         }
+        $stmt = $db->prepare("SELECT level_access,level_description FROM user_access_level WHERE level_access>= :level_access");
+        $stmt->bindParam(':level_access', $_SESSION['nivel']);
+        $stmt->execute();
+        $accessLevel = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
         $stmt = $db->prepare("SELECT loja_acesso FROM users WHERE id = :id");
         $stmt->bindParam(':id', $_SESSION['user_id']);
         $stmt->execute();

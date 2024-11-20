@@ -1,6 +1,3 @@
-<?php
-var_dump($dadosModel);
-?>
 <style>
         /* Inicialmente, o campo estará oculto */
         #loja {
