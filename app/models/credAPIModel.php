@@ -8,16 +8,38 @@ class credAPIModel {
 
     public function getTotalCreds() {
         $db = conexao::getInstance();
-        $stmt = $db->query("SELECT COUNT(*) FROM credenciais_amz");
+        if(!isset($_SESSION['user_id'])){
+            session_start();
+        }
+
+        if($_SESSION['loja_acesso'] == 'Ambas'){
+            $stmt = $db->query("SELECT COUNT(*) FROM credenciais_amz");
+        }else{
+            $stmt = $db->prepare("SELECT COUNT(*) FROM credenciais_amz WHERE nm_loja = :loja_acesso");
+            $stmt->bindParam(':loja_acesso', $_SESSION['loja_acesso']);
+            $stmt->execute();
+        }
         return $stmt->fetchColumn();
     }
 
     public function getCreds($limit, $offset) {
         $db = conexao::getInstance();
-        $stmt = $db->prepare("SELECT nm_loja, CONCAT(LEFT(client_id,10),'...',RIGHT(client_id,10)) AS client_id,CONCAT(LEFT(client_secret,10),'...',RIGHT(client_secret,10)) AS client_secret, CONCAT(LEFT(refresh_token,10),'...',RIGHT(refresh_token,10)) AS refresh_token,dh_last_update,alterado_por FROM credenciais_amz LIMIT :limit OFFSET :offset");
-        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
-        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
-        $stmt->execute();
+        if(!isset($_SESSION['user_id'])){
+            session_start();
+        }
+
+        if($_SESSION['loja_acesso'] == 'Ambas'){
+            $stmt = $db->prepare("SELECT nm_loja, CONCAT(LEFT(client_id,10),'...',RIGHT(client_id,10)) AS client_id,CONCAT(LEFT(client_secret,10),'...',RIGHT(client_secret,10)) AS client_secret, CONCAT(LEFT(refresh_token,10),'...',RIGHT(refresh_token,10)) AS refresh_token,dh_last_update,alterado_por FROM credenciais_amz LIMIT :limit OFFSET :offset");
+            $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+            $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+            $stmt->execute();
+        }else{
+            $stmt = $db->prepare("SELECT nm_loja, CONCAT(LEFT(client_id,10),'...',RIGHT(client_id,10)) AS client_id,CONCAT(LEFT(client_secret,10),'...',RIGHT(client_secret,10)) AS client_secret, CONCAT(LEFT(refresh_token,10),'...',RIGHT(refresh_token,10)) AS refresh_token,dh_last_update,alterado_por FROM credenciais_amz WHERE nm_loja = :loja_acesso LIMIT :limit OFFSET :offset");
+            $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+            $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+            $stmt->bindParam(':loja_acesso', $_SESSION['loja_acesso']);
+            $stmt->execute();
+        }
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
