@@ -100,22 +100,23 @@ class UserModel {
 
     public static function getUserInfo($userId) {
         $db = conexao::getInstance();
-        $stmt = $db->prepare("SELECT id,nome,email,nivel FROM users WHERE id = :userId LIMIT 1");
+        $stmt = $db->prepare("SELECT id,nome,email,nivel,loja_acesso FROM users WHERE id = :userId LIMIT 1");
         $stmt->bindParam(':userId', $userId);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public static function updateUser($userId,$nome, $email, $senha, $nivel) {
+    public static function updateUser($userId,$nome, $email, $senha, $nivel, $loja) {
         $userData = $_SESSION['user_name']." ID: ".$_SESSION['user_id'];
         $db = conexao::getInstance();
-        $stmt = $db->prepare("UPDATE users SET nome = :nome, email= :email, senha = :senha, nivel = :nivel, dh_ultima_modificacao = now(),alterado_por = :alterado_por WHERE id = :userId");
+        $stmt = $db->prepare("UPDATE users SET nome = :nome, email= :email, senha = :senha, nivel = :nivel, dh_ultima_modificacao = now(),alterado_por = :alterado_por, loja_acesso = :loja_acesso WHERE id = :userId");
         $stmt->bindParam(':nome', $nome);
         $stmt->bindParam(':email', $email);
         $stmt->bindParam(':senha', $senha);
         $stmt->bindParam(':nivel', $nivel);
         $stmt->bindParam(':userId', $userId);
         $stmt->bindParam(':alterado_por', $userData);
+        $stmt->bindParam(':loja_acesso', $loja);
         $stmt->execute();
 
         $rowCount = $stmt->rowCount();

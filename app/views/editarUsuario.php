@@ -1,9 +1,3 @@
-<style>
-        /* Inicialmente, o campo estará oculto */
-        #loja {
-            display: none;
-        }
-</style>
 <div class="container">
     <div class="card">
         <div class="card-header">
@@ -30,23 +24,23 @@
                     <select id="nivel" name="nivel" class="form-control" required>
                         <option value=<?php echo $dadosModel['userInfo']['nivel'];?>><?php echo "Manter nivel de acesso atual: ".$dadosModel['userInfo']['nivel'];?></option>
                         <?php foreach ($dadosModel['accessLevels']['accessLevel'] as $accessLevels): ?>
-                        <option value="<?php echo $accessLevels['level_access']?>"><?php echo $accessLevels['level_description']?></option>
+                        <option value="<?php echo $accessLevels['level_access'];?>"><?php echo $accessLevels['level_description']?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
                 <div class="mb-3" id="loja">
                     <label for="loja" class="form-label">Terá acesso a qual loja?</label>
-                    <select name="loja" class="form-control" required>
-                        <option value>Selecione</option>
+                    <select id="select_loja" name="loja" class="form-control" required>
                         <?php
                         if($dadosModel['accessLevels']['accessStore'][0]['loja_acesso']=='Ambas'){
                         ?>
+                        <option id="valorCondicional" value=<?php echo $dadosModel['userInfo']['loja_acesso'];?>><?php echo "Somente ".$dadosModel['userInfo']['loja_acesso'];?></option>
                         <option value="Ergan">Somente Ergan</option>
                         <option value="KO-Star">Somente KO-Star</option>
                         <?php
                         }else{
                         ?>
-                        <option value="<?php echo $dadosModel['accessLevels']['accessStore'][0]['loja_acesso']?>"><?php echo $dadosModel['accessLevels']['accessStore'][0]['loja_acesso']?></option>
+                        <option value="<?php echo $dadosModel['userInfo']['loja_acesso'];?>"><?php echo $dadosModel['userInfo']['loja_acesso']?></option>
                         <?php
                         }
                         ?>
@@ -62,15 +56,42 @@
 // Captura o select e o campo condicional
 const select = document.getElementById('nivel');
 const campoCondicional = document.getElementById('loja');
+const valorCondicional = document.getElementById('valorCondicional');
+const campoLoja = document.getElementById('select_loja');
 
-// Função para verificar a seleção e mostrar/esconder o campo
-select.addEventListener('change', function() {
+// Função para mostrar ou ocultar o campo
+function verificarOpcao() {
+
+    // Se o valor selecionado for 'mostrar', mostramos o campo
+    if (select.value === '3' || select.value === '4') {
+        campoCondicional.style.display = 'block'; // Torna o campo visível
+        campoLoja.setAttribute('required', 'required');
+    } else {
+        campoCondicional.style.display = 'none'; // Oculta o campo
+        campoLoja.removeAttribute('required');
+        campoLoja.value = 'Ambas'; // O valor da opção selecionada será "Ergan"
+    }
+}
+
+// Função para mostrar ou ocultar o campo
+function verificarOpcao2() {
+
     if (select.value === '3' || select.value === '4') {
         // Exibe o campo condicional quando a opção "3" ou "4" for selecionada
-        campoCondicional.style.display = 'block';
+        valorCondicional.style.display = 'none';
+        campoLoja.value = 'Ergan'; // O valor da opção selecionada será "Ergan"
     } else {
         // Caso contrário, esconde o campo
-        campoCondicional.style.display = 'none';
+        valorCondicional.style.display = 'block';
     }
-});
+}
+
+
+// Executar a função assim que a página for carregada
+window.onload = verificarOpcao;
+
+
+// Adicionar um ouvinte de evento para verificar quando o valor do select mudar
+document.getElementById('nivel').addEventListener('change', verificarOpcao);
+document.getElementById('nivel').addEventListener('change', verificarOpcao2);
 </script>

@@ -26,8 +26,13 @@ class editUserController extends Controller{
         $senha = str_replace(array("#","'",";","*"),'',$_POST['senha']);
         $senha = password_hash($senha, PASSWORD_DEFAULT);
         $nivel = str_replace(array("#","'",";","*"),'',$_POST['nivel']);
+        if(isset($_POST['loja'])&&$_POST['loja']!=''){
+            $loja = str_replace(array("#","'",";","*"),'',$_POST['loja']);
+        }else{
+            $loja = 'Ambas';
+        }
         
-        $result = userModel::updateUser($userId, $nome, $email, $senha, $nivel);
+        $result = userModel::updateUser($userId, $nome, $email, $senha, $nivel, $loja);
 
         if($result == 1){
             echo "<script>alert('Usuário atualizado com sucesso!');</script>";
