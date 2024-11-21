@@ -21,20 +21,42 @@ class dashboardModel {
 
     public function qtdOrders($dt_ini = '',$dt_fim = '') {
         $db = conexao::getInstance();
+        if(!isset($_SESSION['user_id'])){
+            session_start();
+        }
 
-        if($dt_ini!=''&&$dt_fim != ''){
-            $stmt = "";
-            $stmt = $db->prepare("SELECT DATE_FORMAT(purchase_date, '%Y-%m-%d') AS dt, COUNT(DISTINCT amazon_order_id) AS QTD_PEDIDOS FROM order_details WHERE DATE_FORMAT(purchase_date, '%Y-%m-%d') >= :dt_ini AND DATE_FORMAT(purchase_date, '%Y-%m-%d') <=:dt_fim GROUP BY DATE_FORMAT(purchase_date, '%Y-%m-%d') ORDER BY 1;");
-            $stmt->bindParam(':dt_ini', $dt_ini);
-            $stmt->bindParam(':dt_fim', $dt_fim);
-            $stmt->execute();
-            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if($_SESSION['loja_acesso'] == 'Ambas'){
+            if($dt_ini!=''&&$dt_fim != ''){
+                $stmt = "";
+                $stmt = $db->prepare("SELECT DATE_FORMAT(purchase_date, '%Y-%m-%d') AS dt, COUNT(DISTINCT amazon_order_id) AS QTD_PEDIDOS FROM order_details WHERE DATE_FORMAT(purchase_date, '%Y-%m-%d') >= :dt_ini AND DATE_FORMAT(purchase_date, '%Y-%m-%d') <=:dt_fim GROUP BY DATE_FORMAT(purchase_date, '%Y-%m-%d') ORDER BY 1;");
+                $stmt->bindParam(':dt_ini', $dt_ini);
+                $stmt->bindParam(':dt_fim', $dt_fim);
+                $stmt->execute();
+                $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }else{
+                $stmt = $db->prepare("SELECT DATE_FORMAT(purchase_date, '%Y-%m-%d') AS dt, COUNT(DISTINCT amazon_order_id) AS QTD_PEDIDOS FROM order_details WHERE DATE_FORMAT(purchase_date, '%Y-%m-%d') >= :primeiroDiaFormatado AND DATE_FORMAT(purchase_date, '%Y-%m-%d') <= :ultimoDiaFormatado GROUP BY DATE_FORMAT(purchase_date, '%Y-%m-%d') ORDER BY 1;");
+                $stmt->bindParam(':primeiroDiaFormatado', $this->primeiroDiaFormatado);
+                $stmt->bindParam(':ultimoDiaFormatado', $this->ultimoDiaFormatado);
+                $stmt->execute();
+                $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }
         }else{
-            $stmt = $db->prepare("SELECT DATE_FORMAT(purchase_date, '%Y-%m-%d') AS dt, COUNT(DISTINCT amazon_order_id) AS QTD_PEDIDOS FROM order_details WHERE DATE_FORMAT(purchase_date, '%Y-%m-%d') >= :primeiroDiaFormatado AND DATE_FORMAT(purchase_date, '%Y-%m-%d') <= :ultimoDiaFormatado GROUP BY DATE_FORMAT(purchase_date, '%Y-%m-%d') ORDER BY 1;");
-            $stmt->bindParam(':primeiroDiaFormatado', $this->primeiroDiaFormatado);
-            $stmt->bindParam(':ultimoDiaFormatado', $this->ultimoDiaFormatado);
-            $stmt->execute();
-            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            if($dt_ini!=''&&$dt_fim != ''){
+                $stmt = "";
+                $stmt = $db->prepare("SELECT DATE_FORMAT(purchase_date, '%Y-%m-%d') AS dt, COUNT(DISTINCT amazon_order_id) AS QTD_PEDIDOS FROM order_details WHERE DATE_FORMAT(purchase_date, '%Y-%m-%d') >= :dt_ini AND DATE_FORMAT(purchase_date, '%Y-%m-%d') <=:dt_fim AND nm_loja = :loja_acesso GROUP BY DATE_FORMAT(purchase_date, '%Y-%m-%d') ORDER BY 1;");
+                $stmt->bindParam(':dt_ini', $dt_ini);
+                $stmt->bindParam(':dt_fim', $dt_fim);
+                $stmt->bindParam(':loja_acesso', $_SESSION['loja_acesso']);
+                $stmt->execute();
+                $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }else{
+                $stmt = $db->prepare("SELECT DATE_FORMAT(purchase_date, '%Y-%m-%d') AS dt, COUNT(DISTINCT amazon_order_id) AS QTD_PEDIDOS FROM order_details WHERE DATE_FORMAT(purchase_date, '%Y-%m-%d') >= :primeiroDiaFormatado AND DATE_FORMAT(purchase_date, '%Y-%m-%d') <= :ultimoDiaFormatado AND nm_loja = :loja_acesso GROUP BY DATE_FORMAT(purchase_date, '%Y-%m-%d') ORDER BY 1;");
+                $stmt->bindParam(':primeiroDiaFormatado', $this->primeiroDiaFormatado);
+                $stmt->bindParam(':ultimoDiaFormatado', $this->ultimoDiaFormatado);
+                $stmt->bindParam(':loja_acesso', $_SESSION['loja_acesso']);
+                $stmt->execute();
+                $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }
         }
 
         // Cria arrays para armazenar os dados
@@ -53,20 +75,42 @@ class dashboardModel {
 
     public function qtdOrderStatus($dt_ini = '',$dt_fim = '') {
         $db = conexao::getInstance();
+        if(!isset($_SESSION['user_id'])){
+            session_start();
+        }
 
-        if($dt_ini!=''&&$dt_fim != ''){
-            $stmt = "";
-            $stmt = $db->prepare("SELECT order_status, COUNT(DISTINCT amazon_order_id) AS QTD_PEDIDOS FROM order_details WHERE DATE_FORMAT(purchase_date, '%Y-%m-%d') >= :dt_ini AND DATE_FORMAT(purchase_date, '%Y-%m-%d') <= :dt_fim GROUP BY order_status ORDER BY 2 DESC;");
-            $stmt->bindParam(':dt_ini', $dt_ini);
-            $stmt->bindParam(':dt_fim', $dt_fim);
-            $stmt->execute();
-            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if($_SESSION['loja_acesso'] == 'Ambas'){
+            if($dt_ini!=''&&$dt_fim != ''){
+                $stmt = "";
+                $stmt = $db->prepare("SELECT order_status, COUNT(DISTINCT amazon_order_id) AS QTD_PEDIDOS FROM order_details WHERE DATE_FORMAT(purchase_date, '%Y-%m-%d') >= :dt_ini AND DATE_FORMAT(purchase_date, '%Y-%m-%d') <= :dt_fim GROUP BY order_status ORDER BY 2 DESC;");
+                $stmt->bindParam(':dt_ini', $dt_ini);
+                $stmt->bindParam(':dt_fim', $dt_fim);
+                $stmt->execute();
+                $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }else{
+                $stmt = $db->prepare("SELECT order_status, COUNT(DISTINCT amazon_order_id) AS QTD_PEDIDOS FROM order_details WHERE DATE_FORMAT(purchase_date, '%Y-%m-%d') >= :primeiroDiaFormatado AND DATE_FORMAT(purchase_date, '%Y-%m-%d') <= :ultimoDiaFormatado GROUP BY order_status ORDER BY 2 DESC;");
+                $stmt->bindParam(':primeiroDiaFormatado', $this->primeiroDiaFormatado);
+                $stmt->bindParam(':ultimoDiaFormatado', $this->ultimoDiaFormatado);
+                $stmt->execute();
+                $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }
         }else{
-            $stmt = $db->prepare("SELECT order_status, COUNT(DISTINCT amazon_order_id) AS QTD_PEDIDOS FROM order_details WHERE DATE_FORMAT(purchase_date, '%Y-%m-%d') >= :primeiroDiaFormatado AND DATE_FORMAT(purchase_date, '%Y-%m-%d') <= :ultimoDiaFormatado GROUP BY order_status ORDER BY 2 DESC;");
-            $stmt->bindParam(':primeiroDiaFormatado', $this->primeiroDiaFormatado);
-            $stmt->bindParam(':ultimoDiaFormatado', $this->ultimoDiaFormatado);
-            $stmt->execute();
-            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            if($dt_ini!=''&&$dt_fim != ''){
+                $stmt = "";
+                $stmt = $db->prepare("SELECT order_status, COUNT(DISTINCT amazon_order_id) AS QTD_PEDIDOS FROM order_details WHERE DATE_FORMAT(purchase_date, '%Y-%m-%d') >= :dt_ini AND DATE_FORMAT(purchase_date, '%Y-%m-%d') <= :dt_fim AND nm_loja = :loja_acesso GROUP BY order_status ORDER BY 2 DESC;");
+                $stmt->bindParam(':dt_ini', $dt_ini);
+                $stmt->bindParam(':dt_fim', $dt_fim);
+                $stmt->bindParam(':loja_acesso', $_SESSION['loja_acesso']);
+                $stmt->execute();
+                $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }else{
+                $stmt = $db->prepare("SELECT order_status, COUNT(DISTINCT amazon_order_id) AS QTD_PEDIDOS FROM order_details WHERE DATE_FORMAT(purchase_date, '%Y-%m-%d') >= :primeiroDiaFormatado AND DATE_FORMAT(purchase_date, '%Y-%m-%d') <= :ultimoDiaFormatado AND nm_loja = :loja_acesso GROUP BY order_status ORDER BY 2 DESC;");
+                $stmt->bindParam(':primeiroDiaFormatado', $this->primeiroDiaFormatado);
+                $stmt->bindParam(':ultimoDiaFormatado', $this->ultimoDiaFormatado);
+                $stmt->bindParam(':loja_acesso', $_SESSION['loja_acesso']);
+                $stmt->execute();
+                $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }
         }
 
         // Cria arrays para armazenar os dados
@@ -85,20 +129,42 @@ class dashboardModel {
 
     public function qtdOrderValues($dt_ini = '',$dt_fim = '') {
         $db = conexao::getInstance();
+        if(!isset($_SESSION['user_id'])){
+            session_start();
+        }
 
-        if($dt_ini!=''&&$dt_fim != ''){
-            $stmt = "";
-            $stmt = $db->prepare("SELECT DATE_FORMAT(purchase_date, '%Y-%m-%d') AS dt, CAST( (SUM(item_price)+SUM(shipping_price)) AS DECIMAL(6,2)) AS VL_TOTAL FROM order_details WHERE DATE_FORMAT(purchase_date, '%Y-%m-%d') >= :dt_ini AND DATE_FORMAT(purchase_date, '%Y-%m-%d') <= :dt_fim GROUP BY DATE_FORMAT(purchase_date, '%Y-%m-%d') ORDER BY 1;");
-            $stmt->bindParam(':dt_ini', $dt_ini);
-            $stmt->bindParam(':dt_fim', $dt_fim);
-            $stmt->execute();
-            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if($_SESSION['loja_acesso'] == 'Ambas'){
+            if($dt_ini!=''&&$dt_fim != ''){
+                $stmt = "";
+                $stmt = $db->prepare("SELECT DATE_FORMAT(purchase_date, '%Y-%m-%d') AS dt, CAST( (SUM(item_price)+SUM(shipping_price)) AS DECIMAL(6,2)) AS VL_TOTAL FROM order_details WHERE DATE_FORMAT(purchase_date, '%Y-%m-%d') >= :dt_ini AND DATE_FORMAT(purchase_date, '%Y-%m-%d') <= :dt_fim GROUP BY DATE_FORMAT(purchase_date, '%Y-%m-%d') ORDER BY 1;");
+                $stmt->bindParam(':dt_ini', $dt_ini);
+                $stmt->bindParam(':dt_fim', $dt_fim);
+                $stmt->execute();
+                $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }else{
+                $stmt = $db->prepare("SELECT DATE_FORMAT(purchase_date, '%Y-%m-%d') AS dt, CAST( (SUM(item_price)+SUM(shipping_price)) AS DECIMAL(6,2)) AS VL_TOTAL FROM order_details WHERE DATE_FORMAT(purchase_date, '%Y-%m-%d') >= :primeiroDiaFormatado AND DATE_FORMAT(purchase_date, '%Y-%m-%d') <= :ultimoDiaFormatado GROUP BY DATE_FORMAT(purchase_date, '%Y-%m-%d') ORDER BY 1;");
+                $stmt->bindParam(':primeiroDiaFormatado', $this->primeiroDiaFormatado);
+                $stmt->bindParam(':ultimoDiaFormatado', $this->ultimoDiaFormatado);
+                $stmt->execute();
+                $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }
         }else{
-            $stmt = $db->prepare("SELECT DATE_FORMAT(purchase_date, '%Y-%m-%d') AS dt, CAST( (SUM(item_price)+SUM(shipping_price)) AS DECIMAL(6,2)) AS VL_TOTAL FROM order_details WHERE DATE_FORMAT(purchase_date, '%Y-%m-%d') >= :primeiroDiaFormatado AND DATE_FORMAT(purchase_date, '%Y-%m-%d') <= :ultimoDiaFormatado GROUP BY DATE_FORMAT(purchase_date, '%Y-%m-%d') ORDER BY 1;");
-            $stmt->bindParam(':primeiroDiaFormatado', $this->primeiroDiaFormatado);
-            $stmt->bindParam(':ultimoDiaFormatado', $this->ultimoDiaFormatado);
-            $stmt->execute();
-            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            if($dt_ini!=''&&$dt_fim != ''){
+                $stmt = "";
+                $stmt = $db->prepare("SELECT DATE_FORMAT(purchase_date, '%Y-%m-%d') AS dt, CAST( (SUM(item_price)+SUM(shipping_price)) AS DECIMAL(6,2)) AS VL_TOTAL FROM order_details WHERE DATE_FORMAT(purchase_date, '%Y-%m-%d') >= :dt_ini AND DATE_FORMAT(purchase_date, '%Y-%m-%d') <= :dt_fim AND nm_loja = :loja_acesso GROUP BY DATE_FORMAT(purchase_date, '%Y-%m-%d') ORDER BY 1;");
+                $stmt->bindParam(':dt_ini', $dt_ini);
+                $stmt->bindParam(':dt_fim', $dt_fim);
+                $stmt->bindParam(':loja_acesso', $_SESSION['loja_acesso']);
+                $stmt->execute();
+                $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }else{
+                $stmt = $db->prepare("SELECT DATE_FORMAT(purchase_date, '%Y-%m-%d') AS dt, CAST( (SUM(item_price)+SUM(shipping_price)) AS DECIMAL(6,2)) AS VL_TOTAL FROM order_details WHERE DATE_FORMAT(purchase_date, '%Y-%m-%d') >= :primeiroDiaFormatado AND DATE_FORMAT(purchase_date, '%Y-%m-%d') <= :ultimoDiaFormatado AND nm_loja = :loja_acesso GROUP BY DATE_FORMAT(purchase_date, '%Y-%m-%d') ORDER BY 1;");
+                $stmt->bindParam(':primeiroDiaFormatado', $this->primeiroDiaFormatado);
+                $stmt->bindParam(':ultimoDiaFormatado', $this->ultimoDiaFormatado);
+                $stmt->bindParam(':loja_acesso', $_SESSION['loja_acesso']);
+                $stmt->execute();
+                $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }
         }
 
         // Cria arrays para armazenar os dados
@@ -118,20 +184,42 @@ class dashboardModel {
 
     public function qtdOrderPayment($dt_ini = '',$dt_fim = '') {
         $db = conexao::getInstance();
+        if(!isset($_SESSION['user_id'])){
+            session_start();
+        }
 
-        if($dt_ini!=''&&$dt_fim != ''){
-            $stmt = "";
-            $stmt = $db->prepare("SELECT payment_method_details AS payment_method, COUNT(DISTINCT amazon_order_id) AS QTD_PEDIDOS FROM order_details WHERE DATE_FORMAT(purchase_date, '%Y-%m-%d') >= :dt_ini AND DATE_FORMAT(purchase_date, '%Y-%m-%d') <= :dt_fim GROUP BY payment_method_details ORDER BY 2 DESC;");
-            $stmt->bindParam(':dt_ini', $dt_ini);
-            $stmt->bindParam(':dt_fim', $dt_fim);
-            $stmt->execute();
-            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if($_SESSION['loja_acesso'] == 'Ambas'){
+            if($dt_ini!=''&&$dt_fim != ''){
+                $stmt = "";
+                $stmt = $db->prepare("SELECT payment_method_details AS payment_method, COUNT(DISTINCT amazon_order_id) AS QTD_PEDIDOS FROM order_details WHERE DATE_FORMAT(purchase_date, '%Y-%m-%d') >= :dt_ini AND DATE_FORMAT(purchase_date, '%Y-%m-%d') <= :dt_fim GROUP BY payment_method_details ORDER BY 2 DESC;");
+                $stmt->bindParam(':dt_ini', $dt_ini);
+                $stmt->bindParam(':dt_fim', $dt_fim);
+                $stmt->execute();
+                $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }else{
+                $stmt = $db->prepare("SELECT payment_method_details AS payment_method, COUNT(DISTINCT amazon_order_id) AS QTD_PEDIDOS FROM order_details WHERE DATE_FORMAT(purchase_date, '%Y-%m-%d') >= :primeiroDiaFormatado AND DATE_FORMAT(purchase_date, '%Y-%m-%d') <= :ultimoDiaFormatado GROUP BY payment_method_details ORDER BY 2 DESC;");
+                $stmt->bindParam(':primeiroDiaFormatado', $this->primeiroDiaFormatado);
+                $stmt->bindParam(':ultimoDiaFormatado', $this->ultimoDiaFormatado);
+                $stmt->execute();
+                $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }
         }else{
-            $stmt = $db->prepare("SELECT payment_method_details AS payment_method, COUNT(DISTINCT amazon_order_id) AS QTD_PEDIDOS FROM order_details WHERE DATE_FORMAT(purchase_date, '%Y-%m-%d') >= :primeiroDiaFormatado AND DATE_FORMAT(purchase_date, '%Y-%m-%d') <= :ultimoDiaFormatado GROUP BY payment_method_details ORDER BY 2 DESC;");
-            $stmt->bindParam(':primeiroDiaFormatado', $this->primeiroDiaFormatado);
-            $stmt->bindParam(':ultimoDiaFormatado', $this->ultimoDiaFormatado);
-            $stmt->execute();
-            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            if($dt_ini!=''&&$dt_fim != ''){
+                $stmt = "";
+                $stmt = $db->prepare("SELECT payment_method_details AS payment_method, COUNT(DISTINCT amazon_order_id) AS QTD_PEDIDOS FROM order_details WHERE DATE_FORMAT(purchase_date, '%Y-%m-%d') >= :dt_ini AND DATE_FORMAT(purchase_date, '%Y-%m-%d') <= :dt_fim AND nm_loja = :loja_acesso GROUP BY payment_method_details ORDER BY 2 DESC;");
+                $stmt->bindParam(':dt_ini', $dt_ini);
+                $stmt->bindParam(':dt_fim', $dt_fim);
+                $stmt->bindParam(':loja_acesso', $_SESSION['loja_acesso']);
+                $stmt->execute();
+                $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }else{
+                $stmt = $db->prepare("SELECT payment_method_details AS payment_method, COUNT(DISTINCT amazon_order_id) AS QTD_PEDIDOS FROM order_details WHERE DATE_FORMAT(purchase_date, '%Y-%m-%d') >= :primeiroDiaFormatado AND DATE_FORMAT(purchase_date, '%Y-%m-%d') <= :ultimoDiaFormatado AND nm_loja = :loja_acesso GROUP BY payment_method_details ORDER BY 2 DESC;");
+                $stmt->bindParam(':primeiroDiaFormatado', $this->primeiroDiaFormatado);
+                $stmt->bindParam(':ultimoDiaFormatado', $this->ultimoDiaFormatado);
+                $stmt->bindParam(':loja_acesso', $_SESSION['loja_acesso']);
+                $stmt->execute();
+                $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }
         }
 
         // Cria arrays para armazenar os dados
@@ -150,24 +238,45 @@ class dashboardModel {
 
     public function qtdProductSales($dt_ini = '',$dt_fim = '',$orderBy = '') {
         $db = conexao::getInstance();
-
+        if(!isset($_SESSION['user_id'])){
+            session_start();
+        }
         if($orderBy == ''){
             $orderBy = "DESC";
         }
 
-        if($dt_ini!=''&&$dt_fim != ''){
-            $stmt = "";
-            $stmt = $db->prepare("SELECT sku, SUM(quantity) AS QTD_PRODUTOS FROM order_details WHERE DATE_FORMAT(purchase_date, '%Y-%m-%d') >= :dt_ini AND DATE_FORMAT(purchase_date, '%Y-%m-%d') <= :dt_fim GROUP BY sku ORDER BY 2 ".$orderBy." LIMIT 10;");
-            $stmt->bindParam(':dt_ini', $dt_ini);
-            $stmt->bindParam(':dt_fim', $dt_fim);
-            $stmt->execute();
-            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if($_SESSION['loja_acesso'] == 'Ambas'){
+            if($dt_ini!=''&&$dt_fim != ''){
+                $stmt = "";
+                $stmt = $db->prepare("SELECT sku, SUM(quantity) AS QTD_PRODUTOS FROM order_details WHERE DATE_FORMAT(purchase_date, '%Y-%m-%d') >= :dt_ini AND DATE_FORMAT(purchase_date, '%Y-%m-%d') <= :dt_fim GROUP BY sku ORDER BY 2 ".$orderBy." LIMIT 10;");
+                $stmt->bindParam(':dt_ini', $dt_ini);
+                $stmt->bindParam(':dt_fim', $dt_fim);
+                $stmt->execute();
+                $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }else{
+                $stmt = $db->prepare("SELECT sku, SUM(quantity) AS QTD_PRODUTOS FROM order_details WHERE DATE_FORMAT(purchase_date, '%Y-%m-%d') >= :primeiroDiaFormatado AND DATE_FORMAT(purchase_date, '%Y-%m-%d') <= :ultimoDiaFormatado GROUP BY sku ORDER BY 2 ".$orderBy." LIMIT 10;");
+                $stmt->bindParam(':primeiroDiaFormatado', $this->primeiroDiaFormatado);
+                $stmt->bindParam(':ultimoDiaFormatado', $this->ultimoDiaFormatado);
+                $stmt->execute();
+                $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }
         }else{
-            $stmt = $db->prepare("SELECT sku, SUM(quantity) AS QTD_PRODUTOS FROM order_details WHERE DATE_FORMAT(purchase_date, '%Y-%m-%d') >= :primeiroDiaFormatado AND DATE_FORMAT(purchase_date, '%Y-%m-%d') <= :ultimoDiaFormatado GROUP BY sku ORDER BY 2 ".$orderBy." LIMIT 10;");
-            $stmt->bindParam(':primeiroDiaFormatado', $this->primeiroDiaFormatado);
-            $stmt->bindParam(':ultimoDiaFormatado', $this->ultimoDiaFormatado);
-            $stmt->execute();
-            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            if($dt_ini!=''&&$dt_fim != ''){
+                $stmt = "";
+                $stmt = $db->prepare("SELECT sku, SUM(quantity) AS QTD_PRODUTOS FROM order_details WHERE DATE_FORMAT(purchase_date, '%Y-%m-%d') >= :dt_ini AND DATE_FORMAT(purchase_date, '%Y-%m-%d') <= :dt_fim AND nm_loja = :loja_acesso GROUP BY sku ORDER BY 2 ".$orderBy." LIMIT 10;");
+                $stmt->bindParam(':dt_ini', $dt_ini);
+                $stmt->bindParam(':dt_fim', $dt_fim);
+                $stmt->bindParam(':loja_acesso', $_SESSION['loja_acesso']);
+                $stmt->execute();
+                $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }else{
+                $stmt = $db->prepare("SELECT sku, SUM(quantity) AS QTD_PRODUTOS FROM order_details WHERE DATE_FORMAT(purchase_date, '%Y-%m-%d') >= :primeiroDiaFormatado AND DATE_FORMAT(purchase_date, '%Y-%m-%d') <= :ultimoDiaFormatado AND nm_loja = :loja_acesso GROUP BY sku ORDER BY 2 ".$orderBy." LIMIT 10;");
+                $stmt->bindParam(':primeiroDiaFormatado', $this->primeiroDiaFormatado);
+                $stmt->bindParam(':ultimoDiaFormatado', $this->ultimoDiaFormatado);
+                $stmt->bindParam(':loja_acesso', $_SESSION['loja_acesso']);
+                $stmt->execute();
+                $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }
         }
 
         // Cria arrays para armazenar os dados
