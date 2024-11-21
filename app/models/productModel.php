@@ -8,16 +8,38 @@ class ProductModel {
 
     public function getTotalProducts() {
         $db = conexao::getInstance();
-        $stmt = $db->query("SELECT COUNT(*) FROM products");
+        if(!isset($_SESSION['user_id'])){
+            session_start();
+        }
+
+        if($_SESSION['loja_acesso'] == 'Ambas'){
+            $stmt = $db->query("SELECT COUNT(*) FROM products");
+        }else{
+            $stmt = $db->prepare("SELECT COUNT(*) FROM products WHERE nm_loja = :loja_acesso");
+            $stmt->bindParam(':loja_acesso', $_SESSION['loja_acesso']);
+            $stmt->execute();
+        }
         return $stmt->fetchColumn();
     }
 
     public function getProducts($limit, $offset) {
         $db = conexao::getInstance();
-        $stmt = $db->prepare("SELECT A.nm_loja,A.item_name,A.seller_sku,A.asin,A.price,A.quantity,A.open_date,B.acquisition_value,B.dh_last_update,B.alterado_por FROM products A LEFT JOIN products_acquisition_value B ON A.nm_loja = B.loja AND A.seller_sku = B.seller_sku LIMIT :limit OFFSET :offset");
-        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
-        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
-        $stmt->execute();
+        if(!isset($_SESSION['user_id'])){
+            session_start();
+        }
+
+        if($_SESSION['loja_acesso'] == 'Ambas'){
+            $stmt = $db->prepare("SELECT A.nm_loja,A.item_name,A.seller_sku,A.asin,A.price,A.quantity,A.open_date,B.acquisition_value,B.dh_last_update,B.alterado_por FROM products A LEFT JOIN products_acquisition_value B ON A.nm_loja = B.loja AND A.seller_sku = B.seller_sku LIMIT :limit OFFSET :offset");
+            $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+            $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+            $stmt->execute();
+        }else{
+            $stmt = $db->prepare("SELECT A.nm_loja,A.item_name,A.seller_sku,A.asin,A.price,A.quantity,A.open_date,B.acquisition_value,B.dh_last_update,B.alterado_por FROM products A LEFT JOIN products_acquisition_value B ON A.nm_loja = B.loja AND A.seller_sku = B.seller_sku WHERE nm_loja = :loja_acesso LIMIT :limit OFFSET :offset");
+            $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+            $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+            $stmt->bindParam(':loja_acesso', $_SESSION['loja_acesso']);
+            $stmt->execute();
+        }
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
