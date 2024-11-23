@@ -39,6 +39,17 @@ INSERT INTO user_access_level VALUES(2,'Nivel 2 (Leitor Ergan E KO-Star)');
 INSERT INTO user_access_level VALUES(3,'Nivel 3 (ADM Somente uma loja)');
 INSERT INTO user_access_level VALUES(4,'Nivel 4 (Leitor Somente uma loja)');
 
+CREATE TABLE log_users (
+id int primary key auto_increment,
+id_user int,
+nm_user varchar(100),
+acao varchar(10), #Cadastrar, Editar, Excluir
+alvo varchar(15), #Usuário, Produto, Credencial API
+old_values varchar(1000), #Valores antigos do registro, se for um Cadastro não amazena
+new_values varchar(1000), #Valores novos do registro, se for uma Exclusão não armazena
+dh_execucao timestamp
+);
+
 CREATE TABLE credenciais_amz(
 nm_loja varchar(100),
 client_id varchar(255),

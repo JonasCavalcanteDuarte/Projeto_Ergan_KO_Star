@@ -44,6 +44,16 @@ class UserModel {
                 $stmt->bindParam(':criado_por', $userData);
                 $stmt->bindParam(':loja_acesso', $loja);
                 $stmt->execute();
+
+                $dados_log = $nome.'|'.$email.'|'.$nivel.'|'.$loja;
+
+                //Registra a ação no log do banco de dados
+                $stmt = $db->prepare('INSERT INTO log_users (id_user, nm_user, acao, alvo, old_values, new_values, dh_execucao) VALUES (:id_user, :nm_user, "Cadastrar", "Usuário", null, :new_values, now())');
+                $stmt->bindParam(':id_user', $_SESSION['user_id']);
+                $stmt->bindParam(':nm_user', $_SESSION['user_name']);
+                $stmt->bindParam(':new_values', $dados_log);
+                $stmt->execute();
+
             } catch (PDOException $e) {
                 // Loga o erro (recomendado para produção)
                 //error_log("Erro no banco de dados: " . $e->getMessage());
@@ -107,8 +117,22 @@ class UserModel {
     }
 
     public static function updateUser($userId,$nome, $email, $senha, $nivel, $loja) {
-        $userData = $_SESSION['user_name']." ID: ".$_SESSION['user_id'];
         $db = conexao::getInstance();
+
+        //Registra a ação no log do banco de dados
+        $dados_old = self::getUserInfo($userId);
+        $oldDados_log = $dados_old['nome'].'|'.$dados_old['email'].'|'.$dados_old['nivel'].'|'.$dados_old['loja_acesso'];
+        $newDados_log = $nome.'|'.$email.'|'.$nivel.'|'.$loja;
+
+        $stmt = $db->prepare('INSERT INTO log_users (id_user, nm_user, acao, alvo, old_values, new_values, dh_execucao) VALUES (:id_user, :nm_user, "Editar", "Usuário", :old_values, :new_values, now())');
+        $stmt->bindParam(':id_user', $_SESSION['user_id']);
+        $stmt->bindParam(':nm_user', $_SESSION['user_name']);
+        $stmt->bindParam(':old_values', $oldDados_log);
+        $stmt->bindParam(':new_values', $newDados_log);
+        $stmt->execute();
+
+        
+        $userData = $_SESSION['user_name']." ID: ".$_SESSION['user_id'];
         $stmt = $db->prepare("UPDATE users SET nome = :nome, email= :email, senha = :senha, nivel = :nivel, dh_ultima_modificacao = now(),alterado_por = :alterado_por, loja_acesso = :loja_acesso WHERE id = :userId");
         $stmt->bindParam(':nome', $nome);
         $stmt->bindParam(':email', $email);
@@ -126,6 +150,19 @@ class UserModel {
 
     public static function deleteUser($userId) {
         $db = conexao::getInstance();
+
+        //Registra a ação no log do banco de dados
+        $dados_old = self::getUserInfo($userId);
+        $oldDados_log = $dados_old['nome'].'|'.$dados_old['email'].'|'.$dados_old['nivel'].'|'.$dados_old['loja_acesso'];
+
+        $stmt = $db->prepare('INSERT INTO log_users (id_user, nm_user, acao, alvo, old_values, new_values, dh_execucao) VALUES (:id_user, :nm_user, "Excluir", "Usuário", :old_values, null, now())');
+        $stmt->bindParam(':id_user', $_SESSION['user_id']);
+        $stmt->bindParam(':nm_user', $_SESSION['user_name']);
+        $stmt->bindParam(':old_values', $oldDados_log);
+        $stmt->execute();
+
+
+
         $stmt = $db->prepare("DELETE FROM users WHERE id = :userId");
         $stmt->bindParam(':userId', $userId);
         $stmt->execute();
