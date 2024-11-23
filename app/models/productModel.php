@@ -54,6 +54,21 @@ class ProductModel {
     public static function updateProduct($sku,$acquisition_value) {
         $userData = $_SESSION['user_name']." ID: ".$_SESSION['user_id'];
         $db = conexao::getInstance();
+        //Registra a ação no log do banco de dados
+        $dados_old = self::getProductInfo($sku);
+        $oldDados_log = $dados_old['seller_sku'].'|'.$dados_old['acquisition_value'];
+        $acquisition_value = str_replace("|", "", $acquisition_value);
+        $acquisition_value = trim($acquisition_value);
+        $newDados_log = $sku.'|'.$acquisition_value;
+
+        $stmt = $db->prepare('INSERT INTO log_users (id_user, nm_user, acao, alvo, old_values, new_values, dh_execucao) VALUES (:id_user, :nm_user, "Editar", "Produto", :old_values, :new_values, now())');
+        $stmt->bindParam(':id_user', $_SESSION['user_id']);
+        $stmt->bindParam(':nm_user', $_SESSION['user_name']);
+        $stmt->bindParam(':old_values', $oldDados_log);
+        $stmt->bindParam(':new_values', $newDados_log);
+        $stmt->execute();
+
+
         $stmt = $db->prepare("UPDATE products_acquisition_value SET acquisition_value = :acquisition_value, dh_last_update = now(),alterado_por = :alterado_por WHERE seller_sku = :sku");
         $stmt->bindParam(':sku', $sku);
         $stmt->bindParam(':acquisition_value', $acquisition_value);
