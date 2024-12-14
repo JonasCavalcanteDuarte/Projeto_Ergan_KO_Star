@@ -4,7 +4,7 @@
 ?>
 <div class="container mt-5">
     <h2>Logs de ações feitas pelos usuários:</h2>
-    <table class="table table-bordered table-striped">
+    <table class="table table-hover">
         <thead>
             <tr>
                 <th>Id Log</th>
