@@ -47,7 +47,8 @@ acao varchar(10), #Cadastrar, Editar, Excluir
 alvo varchar(15), #Usuário, Produto, Credencial API
 old_values varchar(1000), #Valores antigos do registro, se for um Cadastro não amazena
 new_values varchar(1000), #Valores novos do registro, se for uma Exclusão não armazena
-dh_execucao timestamp
+dh_execucao timestamp,
+nm_loja varchar(10)
 );
 
 CREATE TABLE credenciais_amz(

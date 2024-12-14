@@ -36,6 +36,11 @@ class UserModel {
             try {
                 // Tenta executar a consulta
                 $userData = $_SESSION['user_name']." ID: ".$_SESSION['user_id'];
+                if(!isset($_SESSION['user_id'])){
+                    session_start();
+                }
+                $nm_loja = $_SESSION['loja_acesso'];
+
                 $stmt = $db->prepare('INSERT INTO users (nome,email, senha, nivel, dh_criacao,criado_por, loja_acesso) VALUES (:nome, :email, :senha, :nivel, now(),:criado_por, :loja_acesso)');
                 $stmt->bindParam(':nome', $nome);
                 $stmt->bindParam(':email', $email);
@@ -48,10 +53,11 @@ class UserModel {
                 $dados_log = $nome.'|'.$email.'|'.$nivel.'|'.$loja;
 
                 //Registra a ação no log do banco de dados
-                $stmt = $db->prepare('INSERT INTO log_users (id_user, nm_user, acao, alvo, old_values, new_values, dh_execucao) VALUES (:id_user, :nm_user, "Cadastrar", "Usuário", null, :new_values, now())');
+                $stmt = $db->prepare('INSERT INTO log_users (id_user, nm_user, acao, alvo, old_values, new_values, dh_execucao, nm_loja) VALUES (:id_user, :nm_user, "Cadastrar", "Usuário", null, :new_values, now(), :nm_loja)');
                 $stmt->bindParam(':id_user', $_SESSION['user_id']);
                 $stmt->bindParam(':nm_user', $_SESSION['user_name']);
                 $stmt->bindParam(':new_values', $dados_log);
+                $stmt->bindParam(':nm_loja', $nm_loja);
                 $stmt->execute();
 
             } catch (PDOException $e) {
@@ -118,19 +124,6 @@ class UserModel {
 
     public static function updateUser($userId,$nome, $email, $senha, $nivel, $loja) {
         $db = conexao::getInstance();
-
-        //Registra a ação no log do banco de dados
-        $dados_old = self::getUserInfo($userId);
-        $oldDados_log = $dados_old['nome'].'|'.$dados_old['email'].'|'.$dados_old['nivel'].'|'.$dados_old['loja_acesso'];
-        $newDados_log = $nome.'|'.$email.'|'.$nivel.'|'.$loja;
-
-        $stmt = $db->prepare('INSERT INTO log_users (id_user, nm_user, acao, alvo, old_values, new_values, dh_execucao) VALUES (:id_user, :nm_user, "Editar", "Usuário", :old_values, :new_values, now())');
-        $stmt->bindParam(':id_user', $_SESSION['user_id']);
-        $stmt->bindParam(':nm_user', $_SESSION['user_name']);
-        $stmt->bindParam(':old_values', $oldDados_log);
-        $stmt->bindParam(':new_values', $newDados_log);
-        $stmt->execute();
-
         
         $userData = $_SESSION['user_name']." ID: ".$_SESSION['user_id'];
         $stmt = $db->prepare("UPDATE users SET nome = :nome, email= :email, senha = :senha, nivel = :nivel, dh_ultima_modificacao = now(),alterado_por = :alterado_por, loja_acesso = :loja_acesso WHERE id = :userId");
@@ -145,28 +138,49 @@ class UserModel {
 
         $rowCount = $stmt->rowCount();
 
+        //Registra a ação no log do banco de dados
+        $dados_old = self::getUserInfo($userId);
+        $oldDados_log = $dados_old['nome'].'|'.$dados_old['email'].'|'.$dados_old['nivel'].'|'.$dados_old['loja_acesso'];
+        $newDados_log = $nome.'|'.$email.'|'.$nivel.'|'.$loja;
+        if(!isset($_SESSION['user_id'])){
+            session_start();
+        }
+        $nm_loja = $_SESSION['loja_acesso'];
+
+        $stmt = $db->prepare('INSERT INTO log_users (id_user, nm_user, acao, alvo, old_values, new_values, dh_execucao,nm_loja) VALUES (:id_user, :nm_user, "Editar", "Usuário", :old_values, :new_values, now(),:nm_loja)');
+        $stmt->bindParam(':id_user', $_SESSION['user_id']);
+        $stmt->bindParam(':nm_user', $_SESSION['user_name']);
+        $stmt->bindParam(':old_values', $oldDados_log);
+        $stmt->bindParam(':new_values', $newDados_log);
+        $stmt->bindParam(':nm_loja', $nm_loja);
+        $stmt->execute();
+
         return $rowCount;
     }
 
     public static function deleteUser($userId) {
         $db = conexao::getInstance();
 
-        //Registra a ação no log do banco de dados
-        $dados_old = self::getUserInfo($userId);
-        $oldDados_log = $dados_old['nome'].'|'.$dados_old['email'].'|'.$dados_old['nivel'].'|'.$dados_old['loja_acesso'];
-
-        $stmt = $db->prepare('INSERT INTO log_users (id_user, nm_user, acao, alvo, old_values, new_values, dh_execucao) VALUES (:id_user, :nm_user, "Excluir", "Usuário", :old_values, null, now())');
-        $stmt->bindParam(':id_user', $_SESSION['user_id']);
-        $stmt->bindParam(':nm_user', $_SESSION['user_name']);
-        $stmt->bindParam(':old_values', $oldDados_log);
-        $stmt->execute();
-
-
-
         $stmt = $db->prepare("DELETE FROM users WHERE id = :userId");
         $stmt->bindParam(':userId', $userId);
         $stmt->execute();
         $rowCount = $stmt->rowCount();
+
+        //Registra a ação no log do banco de dados
+        $dados_old = self::getUserInfo($userId);
+        $oldDados_log = $dados_old['nome'].'|'.$dados_old['email'].'|'.$dados_old['nivel'].'|'.$dados_old['loja_acesso'];
+        if(!isset($_SESSION['user_id'])){
+            session_start();
+        }
+        $nm_loja = $_SESSION['loja_acesso'];
+
+        $stmt = $db->prepare('INSERT INTO log_users (id_user, nm_user, acao, alvo, old_values, new_values, dh_execucao, nm_loja) VALUES (:id_user, :nm_user, "Excluir", "Usuário", :old_values, null, now(), :nm_loja)');
+        $stmt->bindParam(':id_user', $_SESSION['user_id']);
+        $stmt->bindParam(':nm_user', $_SESSION['user_name']);
+        $stmt->bindParam(':old_values', $oldDados_log);
+        $stmt->bindParam(':nm_loja', $nm_loja);
+        $stmt->execute();
+
         return $rowCount;
     }
 

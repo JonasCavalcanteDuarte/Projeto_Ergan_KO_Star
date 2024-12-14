@@ -54,21 +54,6 @@ class credAPIModel {
     public static function updateCred($nmLoja,$client_id, $client_secret, $refresh_token) {
         $userData = $_SESSION['user_name']." ID: ".$_SESSION['user_id'];
         $db = conexao::getInstance();
-        //Registra a ação no log do banco de dados
-        $dados_old = self::getCredInfo($nmLoja);
-        $dados_old['refresh_token'] = str_replace("|", "", $dados_old['refresh_token']);
-        $dados_old['refresh_token'] = trim($dados_old['refresh_token']);
-        $oldDados_log = $dados_old['nm_loja'].'|'.$dados_old['client_id'].'|'.$dados_old['client_secret'].'|'.$dados_old['refresh_token'];
-        $refresh_token_ = str_replace("|", "", $refresh_token);
-        $refresh_token_ = trim($refresh_token_);
-        $newDados_log = $nmLoja.'|'.substr($client_id, 0, 10).'...'.substr($client_id, -10).'|'.substr($client_secret, 0, 10).'...'.substr($client_secret, -10).'|'.substr($refresh_token_, 0, 10).'...'.substr($refresh_token_, -10);
-
-        $stmt = $db->prepare('INSERT INTO log_users (id_user, nm_user, acao, alvo, old_values, new_values, dh_execucao) VALUES (:id_user, :nm_user, "Editar", "Credencial API", :old_values, :new_values, now())');
-        $stmt->bindParam(':id_user', $_SESSION['user_id']);
-        $stmt->bindParam(':nm_user', $_SESSION['user_name']);
-        $stmt->bindParam(':old_values', $oldDados_log);
-        $stmt->bindParam(':new_values', $newDados_log);
-        $stmt->execute();
 
         $stmt = $db->prepare("UPDATE credenciais_amz SET client_id = :client_id, client_secret= :client_secret, refresh_token = :refresh_token, dh_last_update = now(),alterado_por = :alterado_por WHERE nm_loja = :nmLoja");
         $stmt->bindParam(':client_id', $client_id);
@@ -79,6 +64,27 @@ class credAPIModel {
         $stmt->execute();
 
         $rowCount = $stmt->rowCount();
+
+        //Registra a ação no log do banco de dados
+        $dados_old = self::getCredInfo($nmLoja);
+        $dados_old['refresh_token'] = str_replace("|", "", $dados_old['refresh_token']);
+        $dados_old['refresh_token'] = trim($dados_old['refresh_token']);
+        $oldDados_log = $dados_old['nm_loja'].'|'.$dados_old['client_id'].'|'.$dados_old['client_secret'].'|'.$dados_old['refresh_token'];
+        $refresh_token_ = str_replace("|", "", $refresh_token);
+        $refresh_token_ = trim($refresh_token_);
+        $newDados_log = $nmLoja.'|'.substr($client_id, 0, 10).'...'.substr($client_id, -10).'|'.substr($client_secret, 0, 10).'...'.substr($client_secret, -10).'|'.substr($refresh_token_, 0, 10).'...'.substr($refresh_token_, -10);
+        if(!isset($_SESSION['user_id'])){
+            session_start();
+        }
+        $nm_loja = $_SESSION['loja_acesso'];
+
+        $stmt = $db->prepare('INSERT INTO log_users (id_user, nm_user, acao, alvo, old_values, new_values, dh_execucao, nm_loja) VALUES (:id_user, :nm_user, "Editar", "Credencial API", :old_values, :new_values, now(), :nm_loja)');
+        $stmt->bindParam(':id_user', $_SESSION['user_id']);
+        $stmt->bindParam(':nm_user', $_SESSION['user_name']);
+        $stmt->bindParam(':old_values', $oldDados_log);
+        $stmt->bindParam(':new_values', $newDados_log);
+        $stmt->bindParam(':nm_loja', $nm_loja);
+        $stmt->execute();
 
         return $rowCount;
     }
