@@ -29,9 +29,27 @@
             <div class="navbar-nav">
                 <a class="nav-link active" aria-current="page" href="../public/painel">Painel</a>
                 <a class="nav-link" href="../public/cadastro">Cadastrar usuário</a>
-                <a class="nav-link" href="../public/user">Gerenciar acessos</a>
-                <a class="nav-link" href="../public/credAPI">Gerenciar credenciais API</a>
-                <a class="nav-link" href="../public/product">Gerenciar Produtos</a>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Gerenciar
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="../public/user">Acessos</a>
+                            <a class="dropdown-item" href="../public/credAPI">Credenciais API's</a>
+                            <a class="dropdown-item" href="../public/product">Produtos</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Logs
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="#">Log de usuários</a>
+                            <a class="dropdown-item" href="#">Log API's</a>
+                        </div>
+                    </li>
+                </ul>
                 <a class="nav-link" href="../public/dashboard">Dashboard</a>
                 <a class="nav-link" href="../public/login/logout">Sair</a>
                 <!-- <a class="nav-link disabled" aria-disabled="true" href="#">Alterar credenciais API Amazon</a> -->
@@ -50,5 +68,8 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <!-- Link para o JavaScript do Bootstrap (necessário para o dropdown funcionar) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
