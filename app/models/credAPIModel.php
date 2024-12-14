@@ -54,6 +54,7 @@ class credAPIModel {
     public static function updateCred($nmLoja,$client_id, $client_secret, $refresh_token) {
         $userData = $_SESSION['user_name']." ID: ".$_SESSION['user_id'];
         $db = conexao::getInstance();
+        $dados_old = self::getCredInfo($nmLoja);
 
         $stmt = $db->prepare("UPDATE credenciais_amz SET client_id = :client_id, client_secret= :client_secret, refresh_token = :refresh_token, dh_last_update = now(),alterado_por = :alterado_por WHERE nm_loja = :nmLoja");
         $stmt->bindParam(':client_id', $client_id);
@@ -66,7 +67,6 @@ class credAPIModel {
         $rowCount = $stmt->rowCount();
 
         //Registra a ação no log do banco de dados
-        $dados_old = self::getCredInfo($nmLoja);
         $dados_old['refresh_token'] = str_replace("|", "", $dados_old['refresh_token']);
         $dados_old['refresh_token'] = trim($dados_old['refresh_token']);
         $oldDados_log = $dados_old['nm_loja'].'|'.$dados_old['client_id'].'|'.$dados_old['client_secret'].'|'.$dados_old['refresh_token'];

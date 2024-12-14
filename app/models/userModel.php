@@ -50,7 +50,7 @@ class UserModel {
                 $stmt->bindParam(':loja_acesso', $loja);
                 $stmt->execute();
 
-                $dados_log = $nome.'|'.$email.'|'.$nivel.'|'.$loja;
+                $dados_log = 'Nome: '.$nome.'|E-mail: '.$email.'|Nível acesso: '.$nivel.'|Loja acesso: '.$loja;
 
                 //Registra a ação no log do banco de dados
                 $stmt = $db->prepare('INSERT INTO log_users (id_user, nm_user, acao, alvo, old_values, new_values, dh_execucao, nm_loja) VALUES (:id_user, :nm_user, "Cadastrar", "Usuário", null, :new_values, now(), :nm_loja)');
@@ -124,6 +124,7 @@ class UserModel {
 
     public static function updateUser($userId,$nome, $email, $senha, $nivel, $loja) {
         $db = conexao::getInstance();
+        $dados_old = self::getUserInfo($userId);
         
         $userData = $_SESSION['user_name']." ID: ".$_SESSION['user_id'];
         $stmt = $db->prepare("UPDATE users SET nome = :nome, email= :email, senha = :senha, nivel = :nivel, dh_ultima_modificacao = now(),alterado_por = :alterado_por, loja_acesso = :loja_acesso WHERE id = :userId");
@@ -139,9 +140,10 @@ class UserModel {
         $rowCount = $stmt->rowCount();
 
         //Registra a ação no log do banco de dados
-        $dados_old = self::getUserInfo($userId);
-        $oldDados_log = $dados_old['nome'].'|'.$dados_old['email'].'|'.$dados_old['nivel'].'|'.$dados_old['loja_acesso'];
-        $newDados_log = $nome.'|'.$email.'|'.$nivel.'|'.$loja;
+        var_dump($dados_old);
+        //exit();
+        $oldDados_log = 'Nome: '.$dados_old['nome'].'|E-mail: '.$dados_old['email'].'|Nível acesso: '.$dados_old['nivel'].'|Loja acesso: '.$dados_old['loja_acesso'];
+        $newDados_log = 'Nome: '.$nome.'|E-mail: '.$email.'|Nível acesso: '.$nivel.'|Loja acesso: '.$loja;
         if(!isset($_SESSION['user_id'])){
             session_start();
         }
@@ -160,6 +162,7 @@ class UserModel {
 
     public static function deleteUser($userId) {
         $db = conexao::getInstance();
+        $dados_old = self::getUserInfo($userId);
 
         $stmt = $db->prepare("DELETE FROM users WHERE id = :userId");
         $stmt->bindParam(':userId', $userId);
@@ -167,7 +170,6 @@ class UserModel {
         $rowCount = $stmt->rowCount();
 
         //Registra a ação no log do banco de dados
-        $dados_old = self::getUserInfo($userId);
         $oldDados_log = $dados_old['nome'].'|'.$dados_old['email'].'|'.$dados_old['nivel'].'|'.$dados_old['loja_acesso'];
         if(!isset($_SESSION['user_id'])){
             session_start();

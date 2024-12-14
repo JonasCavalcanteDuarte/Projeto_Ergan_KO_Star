@@ -54,7 +54,8 @@ class ProductModel {
     public static function updateProduct($sku,$acquisition_value) {
         $userData = $_SESSION['user_name']." ID: ".$_SESSION['user_id'];
         $db = conexao::getInstance();
-
+        $dados_old = self::getProductInfo($sku);
+        
         $stmt = $db->prepare("UPDATE products_acquisition_value SET acquisition_value = :acquisition_value, dh_last_update = now(),alterado_por = :alterado_por WHERE seller_sku = :sku");
         $stmt->bindParam(':sku', $sku);
         $stmt->bindParam(':acquisition_value', $acquisition_value);
@@ -65,7 +66,6 @@ class ProductModel {
 
 
         //Registra a ação no log do banco de dados
-        $dados_old = self::getProductInfo($sku);
         $oldDados_log = $dados_old['seller_sku'].'|'.$dados_old['acquisition_value'];
         $acquisition_value = str_replace("|", "", $acquisition_value);
         $acquisition_value = trim($acquisition_value);

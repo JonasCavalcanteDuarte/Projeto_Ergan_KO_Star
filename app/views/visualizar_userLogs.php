@@ -11,6 +11,7 @@
                 <th>Usuário responsável</th>
                 <th>Ação executada</th>
                 <th>Objeto afetado</th>
+                <th>Data e Hora</th>
             </tr>
         </thead>
 
@@ -22,11 +23,12 @@
                 <td><?php echo $log['nm_user']; ?></td>
                 <td><?php echo $log['acao']; ?></td>
                 <td><?php echo $log['alvo']; ?></td>
+                <td><?php echo $log['dh_execucao']; ?></td>
             </tr>
 
             <!-- Sub-linha -->
             <tr id="sub-row-<?php echo $index; ?>" class="sub-row" style="display: none;">
-                <td colspan="4">
+                <td colspan="5">
                     <table class="table table-bordered">
                         <thead>
                             <tr>
