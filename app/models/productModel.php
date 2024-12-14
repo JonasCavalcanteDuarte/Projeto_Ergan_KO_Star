@@ -51,13 +51,14 @@ class ProductModel {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public static function updateProduct($sku,$acquisition_value) {
+    public static function updateProduct($sku, $nm_loja, $acquisition_value) {
         $userData = $_SESSION['user_name']." ID: ".$_SESSION['user_id'];
         $db = conexao::getInstance();
         $dados_old = self::getProductInfo($sku);
         
-        $stmt = $db->prepare("UPDATE products_acquisition_value SET acquisition_value = :acquisition_value, dh_last_update = now(),alterado_por = :alterado_por WHERE seller_sku = :sku");
+        $stmt = $db->prepare("UPDATE products_acquisition_value SET acquisition_value = :acquisition_value, dh_last_update = now(),alterado_por = :alterado_por WHERE seller_sku = :sku AND loja = :nm_loja");
         $stmt->bindParam(':sku', $sku);
+        $stmt->bindParam(':nm_loja', $nm_loja);
         $stmt->bindParam(':acquisition_value', $acquisition_value);
         $stmt->bindParam(':alterado_por', $userData);
         $stmt->execute();
@@ -66,10 +67,10 @@ class ProductModel {
 
 
         //Registra a ação no log do banco de dados
-        $oldDados_log = $dados_old['seller_sku'].'|'.$dados_old['acquisition_value'];
+        $oldDados_log = $dados_old['seller_sku'].'|'.$dados_old['nm_loja'].'|'.$dados_old['acquisition_value'];
         $acquisition_value = str_replace("|", "", $acquisition_value);
         $acquisition_value = trim($acquisition_value);
-        $newDados_log = $sku.'|'.$acquisition_value;
+        $newDados_log = $sku.'|'.$nm_loja.'|'.$acquisition_value;
         if(!isset($_SESSION['user_id'])){
             session_start();
         }

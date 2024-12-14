@@ -6,10 +6,11 @@
             <div class="card-body">
                 <!-- Formulário -->
                 <form action="./editProduct/editarProduto" method="POST">
-                    <input type="hidden" name="sku" value="<?php echo $dadosModel['seller_sku'];?>">                    
+                    <input type="hidden" name="sku" value="<?php echo $dadosModel['seller_sku'];?>">
+                    <input type="hidden" name="nm_loja" value="<?php echo $dadosModel['nm_loja'];?>">                    
                     <div class="mb-3">
-                        <label for="nm_loja" class="form-label">Loja:</label>
-                        <input type="text" name="nm_loja" value="<?php echo $dadosModel['nm_loja']; ?>" class="form-control" disabled>
+                        <label for="loja" class="form-label">Loja:</label>
+                        <input type="text" name="loja" value="<?php echo $dadosModel['nm_loja']; ?>" class="form-control" disabled>
                     </div>
                     <div class="mb-3">
                         <label for="item_name" class="form-label">Produto:</label>

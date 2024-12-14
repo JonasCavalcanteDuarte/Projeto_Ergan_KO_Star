@@ -21,9 +21,10 @@ class editProductController extends Controller{
 
     public function editarProduto(){
         $sku = str_replace(array("#","'",";","*"),'',$_POST['sku']);
+        $nm_loja = str_replace(array("#","'",";","*"),'',$_POST['nm_loja']);
         $acquisition_value = str_replace(array("#","'",";","*"),'',$_POST['acquisition_value']);
         
-        $result = productModel::updateProduct($sku, $acquisition_value);
+        $result = productModel::updateProduct($sku, $nm_loja, $acquisition_value);
 
         if($result == 1){
             echo "<script>alert('Valor pago atualizado com sucesso!');</script>";
@@ -31,7 +32,7 @@ class editProductController extends Controller{
             exit();
         }else{
             echo "<script>alert('Nenhum registro foi alterado, tente novamente mais tarde.');</script>";
-            echo "<script>location.href='../credAPI';</script>";
+            echo "<script>location.href='../product';</script>";
             exit();
         }
     }

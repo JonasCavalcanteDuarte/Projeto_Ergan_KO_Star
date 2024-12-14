@@ -2,7 +2,7 @@
     $page = $dadosPaginacao['page'];
     $total_pages = $dadosPaginacao['total_pages'];
 ?>
-<div class="container mt-5">
+<div class="container mt-6">
     <h2>Logs de ações feitas pelos usuários:</h2>
     <table class="table table-hover">
         <thead>
@@ -11,6 +11,7 @@
                 <th>Usuário responsável</th>
                 <th>Ação executada</th>
                 <th>Objeto afetado</th>
+                <th>Loja</th>
                 <th>Data e Hora</th>
             </tr>
         </thead>
@@ -23,6 +24,7 @@
                 <td><?php echo $log['nm_user']; ?></td>
                 <td><?php echo $log['acao']; ?></td>
                 <td><?php echo $log['alvo']; ?></td>
+                <td><?php echo $log['nm_loja']; ?></td>
                 <td><?php echo $log['dh_execucao']; ?></td>
             </tr>
 
