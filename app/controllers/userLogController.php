@@ -27,13 +27,13 @@ class userLogController  extends Controller{
         $offset = ($page - 1) * $records_per_page;
 
         // Pega o total de registros
-        $total_records = $this->logModel->getTotalLogs();
+        $total_records = $this->logModel->getTotalUserLogs();
 
         // Calcula o número de páginas
         $total_pages = ceil($total_records / $records_per_page);
 
         // Pega os usuários para a página atual
-        $logs = $this->logModel->getLogs($records_per_page, $offset);
+        $logs = $this->logModel->getUserLogs($records_per_page, $offset);
 
         $paginas=array();
 

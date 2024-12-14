@@ -12,7 +12,7 @@ if ($_GET['pagina'] === 'visualizar_userLogs') {
     require_once '../app/controllers/apiLogController.php';
     $controllerns = 'app\\controllers\\apiLogController';
     $c = new $controllerns;
-    $c->index($_GET['userId']);
+    $c->index($_GET['page']);
 }
 
 ?>

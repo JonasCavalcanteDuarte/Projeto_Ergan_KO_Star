@@ -46,7 +46,7 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="../public/userLog">Log de usuários</a>
-                            <a class="dropdown-item" href="#">Log API's</a>
+                            <a class="dropdown-item" href="../public/apiLog">Log API's</a>
                         </div>
                     </li>
                 </ul>
